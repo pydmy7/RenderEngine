@@ -1,0 +1,6 @@
+include(platform.cmake)
+include(sanitizer.cmake)
+include(clangformat.cmake)
+include(clangtidy.cmake)
+include(addtarget.cmake)
+include(copydll.cmake)

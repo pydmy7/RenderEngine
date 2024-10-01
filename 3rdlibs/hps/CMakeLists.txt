@@ -1,0 +1,53 @@
+add_library(hps::core SHARED IMPORTED GLOBAL)
+set_target_properties(
+    hps::core
+    PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include"
+
+    IMPORTED_LOCATION_DEBUG "${CMAKE_CURRENT_SOURCE_DIR}/bin/debug/hps_core.dll"
+    IMPORTED_IMPLIB_DEBUG "${CMAKE_CURRENT_SOURCE_DIR}/lib/debug/hps_core.lib"
+
+    IMPORTED_LOCATION_RELEASE "${CMAKE_CURRENT_SOURCE_DIR}/bin/release/hps_core.dll"
+    IMPORTED_IMPLIB_RELEASE "${CMAKE_CURRENT_SOURCE_DIR}/lib/release/hps_core.lib"
+    
+    IMPORTED_CONFIGURATIONS "DEBUG;RELEASE"
+    IMPORTED_LINK_INTERFACE_LANGUAGES "CXX"
+)
+
+add_library(hps::sprk SHARED IMPORTED GLOBAL)
+set_target_properties(
+    hps::sprk
+    PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include"
+
+    IMPORTED_LOCATION_DEBUG "${CMAKE_CURRENT_SOURCE_DIR}/bin/debug/hps_sprk.dll"
+    IMPORTED_IMPLIB_DEBUG "${CMAKE_CURRENT_SOURCE_DIR}/lib/debug/hps_sprk.lib"
+
+    IMPORTED_LOCATION_RELEASE "${CMAKE_CURRENT_SOURCE_DIR}/bin/release/hps_sprk.dll"
+    IMPORTED_IMPLIB_RELEASE "${CMAKE_CURRENT_SOURCE_DIR}/lib/release/hps_sprk.lib"
+
+    IMPORTED_CONFIGURATIONS "DEBUG;RELEASE"
+    IMPORTED_LINK_INTERFACE_LANGUAGES "CXX"
+)
+
+add_library(hps::sprk_ops SHARED IMPORTED GLOBAL)
+set_target_properties(
+    hps::sprk_ops
+    PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include"
+
+    IMPORTED_LOCATION_DEBUG "${CMAKE_CURRENT_SOURCE_DIR}/bin/debug/hps_sprk_ops.dll"
+    IMPORTED_IMPLIB_DEBUG "${CMAKE_CURRENT_SOURCE_DIR}/lib/debug/hps_sprk_ops.lib"
+
+    IMPORTED_LOCATION_RELEASE "${CMAKE_CURRENT_SOURCE_DIR}/bin/release/hps_sprk_ops.dll"
+    IMPORTED_IMPLIB_RELEASE "${CMAKE_CURRENT_SOURCE_DIR}/lib/release/hps_sprk_ops.lib"
+
+    IMPORTED_CONFIGURATIONS "DEBUG;RELEASE"
+    IMPORTED_LINK_INTERFACE_LANGUAGES "CXX"
+)
+
+add_library(hps::hps INTERFACE IMPORTED GLOBAL)
+target_link_libraries(
+    hps::hps INTERFACE
+    hps::core hps::sprk hps::sprk_ops
+)

@@ -1,0 +1,6 @@
+#include <filesystem>
+
+constexpr std::string_view PROJECT_NAME {"@PROJECT_NAME@"};
+
+const std::filesystem::path SOURCE_DIR {"@PROJECT_SOURCE_DIR@"};
+const std::filesystem::path BINARY_DIR {"@PROJECT_BINARY_DIR@"};
