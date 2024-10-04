@@ -1,7 +1,6 @@
 #include "renderengine/renderengine.hpp"
 
 #include <QApplication>
-#include <QTimer>
 #include <QWheelEvent>
 
 #include <hoops_license.h>
