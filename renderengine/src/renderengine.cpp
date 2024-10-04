@@ -1,8 +1,8 @@
 #include "renderengine/renderengine.hpp"
 
 #include <QApplication>
-#include <QWheelEvent>
 #include <QTimer>
+#include <QWheelEvent>
 
 #include <hoops_license.h>
 #include <sprk_ops.h>
@@ -12,11 +12,10 @@
 namespace RenderEngine {
 
 RenderEngine::RenderEngine(QWidget* parent)
-    : QWidget{parent}
-    , license_{HOOPS_LICENSE}
-    , validPixelToWindowMatrix_{false}
-    , pixelToWindowMatrix_{}
-{
+    : QWidget{parent},
+      license_{HOOPS_LICENSE},
+      validPixelToWindowMatrix_{false},
+      pixelToWindowMatrix_{} {
     init();
 }
 
@@ -29,7 +28,9 @@ RenderEngine::~RenderEngine() {
 
 void RenderEngine::resizeEvent(QResizeEvent*) {
     validPixelToWindowMatrix_ = false;
-    canvas_.GetWindowKey().UpdateWithNotifier(HPS::Window::UpdateType::Refresh).Wait();
+    canvas_.GetWindowKey()
+        .UpdateWithNotifier(HPS::Window::UpdateType::Refresh)
+        .Wait();
 }
 
 void RenderEngine::paintEvent(QPaintEvent*) {
@@ -85,7 +86,8 @@ void RenderEngine::dragEnterEvent(QDragEnterEvent* event) {
 }
 
 void RenderEngine::focusOutEvent(QFocusEvent*) {
-    canvas_.GetWindowKey().GetEventDispatcher().InjectEvent(HPS::FocusLostEvent());
+    canvas_.GetWindowKey().GetEventDispatcher().InjectEvent(
+        HPS::FocusLostEvent());
 }
 
 QPaintEngine* RenderEngine::paintEngine() const {
@@ -96,11 +98,9 @@ HPS::MatrixKit const& RenderEngine::getPixelToWindowMatrix() {
     if (!validPixelToWindowMatrix_) {
         HPS::KeyArray key_array;
         key_array.push_back(canvas_.GetWindowKey());
-        HPS::KeyPath(key_array).ComputeTransform(
-            HPS::Coordinate::Space::Pixel,
-            HPS::Coordinate::Space::Window,
-            pixelToWindowMatrix_
-        );
+        HPS::KeyPath(key_array).ComputeTransform(HPS::Coordinate::Space::Pixel,
+                                                 HPS::Coordinate::Space::Window,
+                                                 pixelToWindowMatrix_);
         validPixelToWindowMatrix_ = true;
     }
 
@@ -108,7 +108,7 @@ HPS::MatrixKit const& RenderEngine::getPixelToWindowMatrix() {
 }
 
 void RenderEngine::getModifierKeys(HPS::InputEvent* event) const {
-    Qt::KeyboardModifiers modifiers {QApplication::keyboardModifiers()};
+    Qt::KeyboardModifiers modifiers{QApplication::keyboardModifiers()};
     if (modifiers.testFlag(Qt::KeyboardModifier::ShiftModifier)) {
         event->ModifierKeyState.Shift(true);
     }
@@ -117,7 +117,9 @@ void RenderEngine::getModifierKeys(HPS::InputEvent* event) const {
     }
 }
 
-HPS::MouseEvent RenderEngine::buildMouseEvent(QMouseEvent* in_event, HPS::MouseEvent::Action action, std::size_t click_count) {
+HPS::MouseEvent RenderEngine::buildMouseEvent(QMouseEvent* in_event,
+                                              HPS::MouseEvent::Action action,
+                                              std::size_t click_count) {
     auto scaleFactor = this->devicePixelRatio();
     HPS::Point pos(in_event->x() * scaleFactor, in_event->y() * scaleFactor, 0);
     pos = getPixelToWindowMatrix().Transform(pos);
@@ -128,11 +130,9 @@ HPS::MouseEvent RenderEngine::buildMouseEvent(QMouseEvent* in_event, HPS::MouseE
     out_event.ClickCount = click_count;
     if (in_event->button() == Qt::MouseButton::LeftButton) {
         out_event.CurrentButton = HPS::MouseButtons::ButtonLeft();
-    }
-    else if (in_event->button() == Qt::MouseButton::RightButton) {
+    } else if (in_event->button() == Qt::MouseButton::RightButton) {
         out_event.CurrentButton = HPS::MouseButtons::ButtonRight();
-    }
-    else if (in_event->button() == Qt::MouseButton::MiddleButton) {
+    } else if (in_event->button() == Qt::MouseButton::MiddleButton) {
         out_event.CurrentButton = HPS::MouseButtons::ButtonMiddle();
     }
 
@@ -141,7 +141,8 @@ HPS::MouseEvent RenderEngine::buildMouseEvent(QMouseEvent* in_event, HPS::MouseE
     return out_event;
 }
 
-HPS::KeyboardEvent RenderEngine::buildKeyboardEvent(QKeyEvent* in_event, HPS::KeyboardEvent::Action action) const {
+HPS::KeyboardEvent RenderEngine::buildKeyboardEvent(
+    QKeyEvent* in_event, HPS::KeyboardEvent::Action action) const {
     HPS::KeyboardCodeArray code;
     code.push_back(static_cast<HPS::KeyboardCode>(in_event->key()));
 
@@ -159,8 +160,8 @@ void RenderEngine::init() {
     QWidget::setAttribute(Qt::WA_OpaquePaintEvent);
     QWidget::setAttribute(Qt::WA_NoSystemBackground);
     QWidget::setAttribute(Qt::WA_StaticContents);
-	QWidget::setAttribute(Qt::WA_DontCreateNativeAncestors);
-	QWidget::setAttribute(Qt::WA_NativeWindow);
+    QWidget::setAttribute(Qt::WA_DontCreateNativeAncestors);
+    QWidget::setAttribute(Qt::WA_NativeWindow);
     QWidget::setFocusPolicy(Qt::StrongFocus);
     QWidget::setBackgroundRole(QPalette::NoRole);
     QWidget::setAcceptDrops(true);
@@ -177,9 +178,7 @@ void RenderEngine::init() {
         .Push(new HPS::OrbitOperator(HPS::MouseButtons::ButtonLeft()));
 
     canvas_ = HPS::Factory::CreateCanvas(
-        static_cast<HPS::WindowHandle>(this->winId()),
-        "RenderEngine"
-    );
+        static_cast<HPS::WindowHandle>(this->winId()), "RenderEngine");
     canvas_.AttachViewAsLayout(view_);
 }
 
