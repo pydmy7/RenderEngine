@@ -5,7 +5,7 @@
 #include "sprk.h"
 
 #if !defined(__APPLE__) && !defined(TARGET_OS_ANDROID)
-#  define SPRK_PUBLISH_SUPPORTED
+#define SPRK_PUBLISH_SUPPORTED
 #endif
 
 using namespace HPS;
@@ -15,26 +15,27 @@ float DegreesToRadians(float degrees);
 MeshKey CreateToroid(SegmentKey insertHere);
 SegmentKey InsertCross(SegmentKey insertHere);
 
-void describeComponent(Component component, UTF8 * description);
+void describeComponent(Component component, UTF8* description);
 
-class CustomEvent : public Event
-{
+class CustomEvent : public Event {
 public:
-	CustomEvent(intptr_t in_channel=0) : Event(in_channel) { channel = in_channel ? in_channel : GetClassID(); }
-	CustomEvent(intptr_t in_channel, SegmentKey sKey) : Event(in_channel), textSegmentKey(sKey) {}
+    CustomEvent(intptr_t in_channel = 0) : Event(in_channel) {
+        channel = in_channel ? in_channel : GetClassID();
+    }
 
-	virtual Event * Clone() const;
+    CustomEvent(intptr_t in_channel, SegmentKey sKey)
+        : Event(in_channel), textSegmentKey(sKey) {}
 
-	SegmentKey textSegmentKey;
+    virtual Event* Clone() const;
+
+    SegmentKey textSegmentKey;
 };
 
-class CustomEventHandler : public EventHandler
-{
+class CustomEventHandler : public EventHandler {
 public:
-	~CustomEventHandler() { Shutdown(); }
+    ~CustomEventHandler() { Shutdown(); }
 
-	EventHandler::HandleResult Handle(Event const * in_event);
+    EventHandler::HandleResult Handle(Event const* in_event);
 };
 
-#endif // _SAMPLE_COMMON_H_
-
+#endif  // _SAMPLE_COMMON_H_

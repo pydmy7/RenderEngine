@@ -1,7 +1,7 @@
 #if defined __APPLE__
-#  include "SamplesMacOS.h"
+#include "SamplesMacOS.h"
 #else
-#  include "sample.h"
+#include "sample.h"
 #endif
 
 #include "sample_common.h"
@@ -9,16 +9,16 @@
 
 using namespace HPS;
 
-void Sample::Shell_Attributes(WindowKey wk, Canvas canvas, View view, Model model, SegmentKey modelKey)
-{
-
+void Sample::Shell_Attributes(WindowKey wk, Canvas canvas, View view,
+                              Model model, SegmentKey modelKey) {
     /* Sample: Shell_Attributes
      * This sample will show you how to:
      * - Insert a shell
      * - Create a Material Palette
      * - Assign a material at the geometry level
      *
-     * Read more about the topics covered in this sample in our Programming Guide
+     * Read more about the topics covered in this sample in our Programming
+     * Guide
      * - section 2.1:	Shells
      * - section 4.2:	Materials and Material Palettes */
 
@@ -37,17 +37,19 @@ void Sample::Shell_Attributes(WindowKey wk, Canvas canvas, View view, Model mode
     ShellKey box3 = CreateBox(box, Point(5, 5, 5), Point(7, 7, 7));
 
     /* This next block of code shows how to define a Material Palette
-     * 1. Material Palettes need to be defined in a portfolio, so the first step is to
-     *    obtain a PortfolioKey object.
-     * 2. Material Palettes, when set on a segment, inherit down the scene graph like
-     *    attributes. Therefore it is safe to set the material palette on the modelKey
-     *    segment: the box segment will inherit this material palette
-     * 3. Three MaterialKit objects are created. In this example each material kit describes
-     *    a simple diffuse color, but many different attributes can be set on a single kit
-     * 4. A MaterialPalette is defined in a portfolio by supplying a name for the material palette
-     *    and an array of MaterialKit objects
+     * 1. Material Palettes need to be defined in a portfolio, so the first step
+     * is to obtain a PortfolioKey object.
+     * 2. Material Palettes, when set on a segment, inherit down the scene graph
+     * like attributes. Therefore it is safe to set the material palette on the
+     * modelKey segment: the box segment will inherit this material palette
+     * 3. Three MaterialKit objects are created. In this example each material
+     * kit describes a simple diffuse color, but many different attributes can
+     * be set on a single kit
+     * 4. A MaterialPalette is defined in a portfolio by supplying a name for
+     * the material palette and an array of MaterialKit objects
      * 5. The material palette is set on the segment.
-     *    At this point the materials defined in the myPalette palette can be used on this segment
+     *    At this point the materials defined in the myPalette palette can be
+     * used on this segment
      * */
     MaterialKitArray materialKit;
     PortfolioKey portfolio;
@@ -55,16 +57,18 @@ void Sample::Shell_Attributes(WindowKey wk, Canvas canvas, View view, Model mode
     materialKit.push_back(MaterialKit().SetDiffuse(RGBAColor(0, 0, 1, 1)));
     materialKit.push_back(MaterialKit().SetDiffuse(RGBAColor(1, 1, 0, 1)));
     materialKit.push_back(MaterialKit().SetDiffuse(RGBAColor(0, 1, 0, 1)));
-    MaterialPaletteDefinition mpd = portfolio.DefineMaterialPalette("myPalette", materialKit);
+    MaterialPaletteDefinition mpd =
+        portfolio.DefineMaterialPalette("myPalette", materialKit);
     modelKey.SetMaterialPalette("myPalette");
 
-    /* This next block of code shows how to set some of the materials defined in the myPalette
-     * palette to the shells inserted above.
-     * These geometry-level attributes will have precedence over the segment-level attributes set above
-     * 1. Create a MaterialMappingKit object, and use one of the ByIndex methods to set attributes on
-     *    the shell
-     * 2. Since one of the shell does not have a geometry-level attribute set on it, it will use the
-     *    segment-level attributes set above instead.
+    /* This next block of code shows how to set some of the materials defined in
+     * the myPalette palette to the shells inserted above. These geometry-level
+     * attributes will have precedence over the segment-level attributes set
+     * above
+     * 1. Create a MaterialMappingKit object, and use one of the ByIndex methods
+     * to set attributes on the shell
+     * 2. Since one of the shell does not have a geometry-level attribute set on
+     * it, it will use the segment-level attributes set above instead.
      */
     MaterialMappingKit materialMappingKit;
     materialMappingKit.SetFaceMaterialByIndex(0);
@@ -74,5 +78,4 @@ void Sample::Shell_Attributes(WindowKey wk, Canvas canvas, View view, Model mode
 
     view.FitWorld();
     view.GetSegmentKey().GetCameraControl().Orbit(35, 25);
-
 }

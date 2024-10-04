@@ -1,7 +1,7 @@
 #if defined __APPLE__
-#  include "SamplesMacOS.h"
+#include "SamplesMacOS.h"
 #else
-#  include "sample.h"
+#include "sample.h"
 #endif
 
 #include "sample_common.h"
@@ -9,23 +9,24 @@
 
 using namespace HPS;
 
-void Sample::Sub_Shell_Attributes(WindowKey wk, Canvas canvas, View view, Model model, SegmentKey modelKey)
-{
-
+void Sample::Sub_Shell_Attributes(WindowKey wk, Canvas canvas, View view,
+                                  Model model, SegmentKey modelKey) {
     /* Sample: Shell_Attributes
      * This sample will show you how to:
      * - Insert a shell
      * - Divide the screen into sub-window
      * - Change shell level attributes
      *
-     * Read more about the topics covered in this sample in our Programming Guide
+     * Read more about the topics covered in this sample in our Programming
+     * Guide
      * - section 2.1:	Shells */
 
     SubwindowKit subwindowKit;
     VisibilityKit visibilityKit;
 
-    /* This block of code sets visibility and color attributes at the segment level
-     * Shell level attributes take precedence over segment level attributes */
+    /* This block of code sets visibility and color attributes at the segment
+     * level Shell level attributes take precedence over segment level
+     * attributes */
     visibilityKit.SetFaces(true).SetEdges(true).SetVertices(true);
     modelKey.SetVisibility(visibilityKit);
     modelKey.GetMaterialMappingControl()
@@ -35,10 +36,13 @@ void Sample::Sub_Shell_Attributes(WindowKey wk, Canvas canvas, View view, Model 
     modelKey.GetTextAttributeControl().SetAlignment(Text::Alignment::Center);
 
     /* This block of code divides the screen into sub-windows.
-     * Each segment gets its own sub-window, all segments are direct children of the modelKey segment
-     * 1. To set a sub-window call the SetSubwindow method with the dimensions of the sub-window,
-     *		normalized between -1 and 1, with (-1, 1) pointing to the top left corner */
-    modelKey.GetSubwindowControl().SetBackground(Subwindow::Background::Transparent);
+     * Each segment gets its own sub-window, all segments are direct children of
+     *the modelKey segment
+     * 1. To set a sub-window call the SetSubwindow method with the dimensions
+     *of the sub-window, normalized between -1 and 1, with (-1, 1) pointing to
+     *the top left corner */
+    modelKey.GetSubwindowControl().SetBackground(
+        Subwindow::Background::Transparent);
 
     // Vertex Visibility
     SegmentKey box = modelKey.Subsegment("box");
@@ -74,5 +78,4 @@ void Sample::Sub_Shell_Attributes(WindowKey wk, Canvas canvas, View view, Model 
 
     view.FitWorld();
     view.GetSegmentKey().GetCameraControl().Orbit(35, 25);
-
 }

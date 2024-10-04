@@ -1,7 +1,7 @@
 #if defined __APPLE__
-#  include "SamplesMacOS.h"
+#include "SamplesMacOS.h"
 #else
-#  include "sample.h"
+#include "sample.h"
 #endif
 
 #include "sample_common.h"
@@ -9,33 +9,41 @@
 
 using namespace HPS;
 
-void Sample::Insert_Cube(WindowKey wk, Canvas canvas, View view, Model model, SegmentKey modelKey)
-{
-
+void Sample::Insert_Cube(WindowKey wk, Canvas canvas, View view, Model model,
+                         SegmentKey modelKey) {
     /* Sample: Insert cube
      * This sample will show you how to:
      * - Create a basic cube
      *
-     * Read more about the topics covered in this sample in our Programming Guide
+     * Read more about the topics covered in this sample in our Programming
+     * Guide
      * - section 2.1:	Shells */
 
-    float size = 1.0f; // size of the cube, in world units
-    Point center = Point(0, 0, 0); // center point of the cube
+    float size = 1.0f;              // size of the cube, in world units
+    Point center = Point(0, 0, 0);  // center point of the cube
 
     PointArray pointArray;
     pointArray.resize(8);
 
     float halflength = size / 2;
 
-    pointArray[0] = Point(-halflength + center.x, -halflength + center.y, halflength + center.z);
-    pointArray[1] = Point(halflength + center.x, -halflength + center.y, halflength + center.z);
-    pointArray[2] = Point(halflength + center.x, halflength + center.y, halflength + center.z);
-    pointArray[3] = Point(-halflength + center.x, halflength + center.y, halflength + center.z);
+    pointArray[0] = Point(-halflength + center.x, -halflength + center.y,
+                          halflength + center.z);
+    pointArray[1] = Point(halflength + center.x, -halflength + center.y,
+                          halflength + center.z);
+    pointArray[2] = Point(halflength + center.x, halflength + center.y,
+                          halflength + center.z);
+    pointArray[3] = Point(-halflength + center.x, halflength + center.y,
+                          halflength + center.z);
 
-    pointArray[4] = Point(-halflength + center.x, -halflength + center.y, -halflength + center.z);
-    pointArray[5] = Point(halflength + center.x, -halflength + center.y, -halflength + center.z);
-    pointArray[6] = Point(halflength + center.x, halflength + center.y, -halflength + center.z);
-    pointArray[7] = Point(-halflength + center.x, halflength + center.y, -halflength + center.z);
+    pointArray[4] = Point(-halflength + center.x, -halflength + center.y,
+                          -halflength + center.z);
+    pointArray[5] = Point(halflength + center.x, -halflength + center.y,
+                          -halflength + center.z);
+    pointArray[6] = Point(halflength + center.x, halflength + center.y,
+                          -halflength + center.z);
+    pointArray[7] = Point(-halflength + center.x, halflength + center.y,
+                          -halflength + center.z);
 
     IntArray faceList;
     faceList.resize(30);
@@ -77,9 +85,10 @@ void Sample::Insert_Cube(WindowKey wk, Canvas canvas, View view, Model model, Se
 
     modelKey.InsertShell(pointArray, faceList);
 
-    view.GetSegmentKey().GetCameraControl().SetPosition(Point(2, 1, -5)).SetProjection(HPS::Camera::Projection::Perspective);
+    view.GetSegmentKey()
+        .GetCameraControl()
+        .SetPosition(Point(2, 1, -5))
+        .SetProjection(HPS::Camera::Projection::Perspective);
 
     view.FitWorld();
-
-
 }

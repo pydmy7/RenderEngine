@@ -1,7 +1,7 @@
 #if defined __APPLE__
-#  include "SamplesMacOS.h"
+#include "SamplesMacOS.h"
 #else
-#  include "sample.h"
+#include "sample.h"
 #endif
 
 #include "sample_common.h"
@@ -9,8 +9,8 @@
 
 using namespace HPS;
 
-void Sample::Custom_Event(WindowKey wk, Canvas canvas, View view, Model model, SegmentKey modelKey)
-{
+void Sample::Custom_Event(WindowKey wk, Canvas canvas, View view, Model model,
+                          SegmentKey modelKey) {
     /* Sample: Custom_Event
      * This sample will show you how to:
      * - Create a custom event
@@ -18,7 +18,8 @@ void Sample::Custom_Event(WindowKey wk, Canvas canvas, View view, Model model, S
      * - Inject an event in HPS
      * - Obtain an event dispatcher and subscribe to event notifications
      *
-     * Read more about the topics covered in this sample in our Programming Guide
+     * Read more about the topics covered in this sample in our Programming
+     * Guide
      * - section 10.1:	Event Handling
      * - section 10.2:	Custom Events */
 
@@ -29,9 +30,9 @@ void Sample::Custom_Event(WindowKey wk, Canvas canvas, View view, Model model, S
     /* an Event Handler class is responsible for handling particular events.
      * The CustomEventHandler class is implemented in sample_commom.[cpp|h]
      *
-     * In order to create a class to be used for event handling, the class will need
-     * to derive from HPS::EventHandler, and will need to override this method:
-     * EventHandler::HandleResult Handle(Event const * in_event);
+     * In order to create a class to be used for event handling, the class will
+     * need to derive from HPS::EventHandler, and will need to override this
+     * method: EventHandler::HandleResult Handle(Event const * in_event);
      *
      * The CustomEventHandler class responds to events by printing out a message
      * on the screen */
@@ -48,19 +49,21 @@ void Sample::Custom_Event(WindowKey wk, Canvas canvas, View view, Model model, S
      * The CustomEvent class is implemented in sample_common.[cpp|h]
      *
      * In order to create a class to be used as an Event, the class will need
-     * to derive from HPS::Event, and will need to override the following method:
-     * virtual Event * CustomEvent::Clone() const;
+     * to derive from HPS::Event, and will need to override the following
+     * method: virtual Event * CustomEvent::Clone() const;
      *
-     * The class will also need to call the base constructor from its own constructor
+     * The class will also need to call the base constructor from its own
+     * constructor
      *
      * Once the event is created, the dispatcher is used to inject it into HPS.
      * Events are handled on separate threads.
      * Events can be dispatched both with or without a notifier.
-     * Using a notifier allows you to wait for the Event Handling thread to return
-     * before continuing with the execution, as shown below.
+     * Using a notifier allows you to wait for the Event Handling thread to
+     * return before continuing with the execution, as shown below.
      * */
     CustomEvent customEvent(customEventType, modelKey);
-    EventNotifier eventNotifier = dispatcher.InjectEventWithNotifier(customEvent);
+    EventNotifier eventNotifier =
+        dispatcher.InjectEventWithNotifier(customEvent);
     eventNotifier.Wait();
 
     view.FitWorld();

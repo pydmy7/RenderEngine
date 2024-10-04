@@ -1,7 +1,7 @@
 #if defined __APPLE__
-#  include "SamplesMacOS.h"
+#include "SamplesMacOS.h"
 #else
-#  include "sample.h"
+#include "sample.h"
 #endif
 
 #include "sample_common.h"
@@ -9,9 +9,9 @@
 
 using namespace HPS;
 
-void Sample::Select_By_Point(WindowKey wk, Canvas canvas, View view, Model model, SegmentKey modelKey)
-{
-	WindowKey myWindowKey(wk);
+void Sample::Select_By_Point(WindowKey wk, Canvas canvas, View view,
+                             Model model, SegmentKey modelKey) {
+    WindowKey myWindowKey(wk);
 
     Point selectionPoint(0, 0, 0);
 
@@ -22,20 +22,27 @@ void Sample::Select_By_Point(WindowKey wk, Canvas canvas, View view, Model model
     myWindowKey.UpdateWithNotifier().Wait();
 
     // example 1: analytic selection
-    myWindowKey.GetSelectionOptionsControl().SetLevel(HPS::Selection::Level::Entity); // this will be an entity-level selection
-    myWindowKey.GetSelectionOptionsControl().SetAlgorithm(HPS::Selection::Algorithm::Analytic);
+    myWindowKey.GetSelectionOptionsControl().SetLevel(
+        HPS::Selection::Level::Entity);  // this will be an entity-level
+                                         // selection
+    myWindowKey.GetSelectionOptionsControl().SetAlgorithm(
+        HPS::Selection::Algorithm::Analytic);
 
     HPS::SelectionResults selectionResults;
-    size_t numSelectedItems = myWindowKey.GetSelectionControl().SelectByPoint(selectionPoint, selectionResults);
+    size_t numSelectedItems = myWindowKey.GetSelectionControl().SelectByPoint(
+        selectionPoint, selectionResults);
 
-    // this is an analytic selection, all 3 spheres should be returned as selected
+    // this is an analytic selection, all 3 spheres should be returned as
+    // selected
     if (numSelectedItems != 3) {
         // if we get here, something failed
     }
 
     // example 2: visual selection
-    myWindowKey.GetSelectionOptionsControl().SetAlgorithm(HPS::Selection::Algorithm::Visual);
-    numSelectedItems = myWindowKey.GetSelectionControl().SelectByPoint(selectionPoint, selectionResults);
+    myWindowKey.GetSelectionOptionsControl().SetAlgorithm(
+        HPS::Selection::Algorithm::Visual);
+    numSelectedItems = myWindowKey.GetSelectionControl().SelectByPoint(
+        selectionPoint, selectionResults);
 
     // this is an visual selection, only 1 sphere should be returned
     if (numSelectedItems == 1) {
@@ -54,6 +61,4 @@ void Sample::Select_By_Point(WindowKey wk, Canvas canvas, View view, Model model
 
         srIterator.Next();
     }
-
-
 }

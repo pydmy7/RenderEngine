@@ -188,14 +188,14 @@ void RenderEngine::init() {
 void RenderEngine::render() {
     HPS::SegmentKey modelKey = model_.GetSegmentKey();
 
-    HPS::PointArray points {
+    HPS::PointArray points{
         HPS::Point{0, 0, 0},
         HPS::Point{0, 1, 0},
         HPS::Point{1, 1, 0},
         HPS::Point{1, 0, 0},
     };
 
-    HPS::IntArray faces {
+    HPS::IntArray faces{
         4, 0, 1, 2, 3,
     };
 

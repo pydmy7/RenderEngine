@@ -1,7 +1,7 @@
 #if defined __APPLE__
-#  include "SamplesMacOS.h"
+#include "SamplesMacOS.h"
 #else
-#  include "sample.h"
+#include "sample.h"
 #endif
 
 #include "sample_common.h"
@@ -9,28 +9,34 @@
 
 using namespace HPS;
 
-void Sample::Render_Modes(WindowKey wk, Canvas canvas, View view, Model model, SegmentKey modelKey)
-{
-
+void Sample::Render_Modes(WindowKey wk, Canvas canvas, View view, Model model,
+                          SegmentKey modelKey) {
     /* Sample: Render_Modes
      * This sample will show you how to:
      * - Load an HSF file through Stream and check for Stream IO exceptions
      * - Divide the screen into sub-window
      * - Include a segment into other segments
-     * - Render with flat shading, wireframe, hidden line, gouraud and phong algorithms
+     * - Render with flat shading, wireframe, hidden line, gouraud and phong
+     * algorithms
      * - Use color index interpolation
      *
-     * Read more about the topics covered in this sample in our Programming Guide
+     * Read more about the topics covered in this sample in our Programming
+     * Guide
      * - section 7.5:	Lighting Interpolation*/
 
     /* This next block of code shows you how to load an HSF file
-     * 1. Create an ImportOptionsKit and set the segment in which you want the file to be loaded
-     * 2. Use the Stream::File::Import method to load the desired file, with the options you specified
-     * 3. Since this operation happens on a separate thread, wait for it to complete before proceeding
+     * 1. Create an ImportOptionsKit and set the segment in which you want the
+     *file to be loaded
+     * 2. Use the Stream::File::Import method to load the desired file, with the
+     *options you specified
+     * 3. Since this operation happens on a separate thread, wait for it to
+     *complete before proceeding
      * 4. Use a try-catch block to capture any Stream IO exceptions
-     * 5. Root segments are special segments, which can only be created from the Database. Since this root segment
-     *		is not associated with a window, its contents will not be displayed on the screen. This segment
-     *		will be used to store geometry which can later be included in segments which are under a window */
+     * 5. Root segments are special segments, which can only be created from the
+     *Database. Since this root segment is not associated with a window, its
+     *contents will not be displayed on the screen. This segment will be used to
+     *store geometry which can later be included in segments which are under a
+     *window */
     SegmentKey includeLibrary = Database::CreateRootSegment();
     SegmentKey urn = includeLibrary.Subsegment();
 
@@ -42,12 +48,14 @@ void Sample::Render_Modes(WindowKey wk, Canvas canvas, View view, Model model, S
         importOptionsKit.SetSegment(urn);
         UTF8 filename = INPUT_FOLDER + "/urn.hsf";
 
-        notifier = Stream::File::Import(static_cast<char const*>(filename), importOptionsKit);
+        notifier = Stream::File::Import(static_cast<char const*>(filename),
+                                        importOptionsKit);
         notifier.Wait();
 
         // Find the geometry mesh
         SearchResults searchResults;
-        size_t found = urn.Find(Search::Type::Geometry, Search::Space::Subsegments, searchResults);
+        size_t found = urn.Find(Search::Type::Geometry,
+                                Search::Space::Subsegments, searchResults);
         if (found != 1)
             throw IOException("The geometry is missing", IOResult::Failure);
 
@@ -58,7 +66,8 @@ void Sample::Render_Modes(WindowKey wk, Canvas canvas, View view, Model model, S
             PointArray points;
             urnMeshKey.ShowPoints(points);
 
-            // Setup vertex RGB colors which will be used for face color interpolation
+            // Setup vertex RGB colors which will be used for face color
+            // interpolation
             size_t numberOfPoints = points.size();
             float quarterPoints = (float)numberOfPoints / 4.0f;
             RGBColorArray colorArray(numberOfPoints);
@@ -73,10 +82,10 @@ void Sample::Render_Modes(WindowKey wk, Canvas canvas, View view, Model model, S
                     colorArray[i] = RGBColor(0.87f, 0.65f, 0);
             }
 
-            urnMeshKey.SetVertexRGBColorsByRange(0, colorArray, Mesh::Component::Faces);
+            urnMeshKey.SetVertexRGBColorsByRange(0, colorArray,
+                                                 Mesh::Component::Faces);
         }
-    }
-    catch (IOException const&) {
+    } catch (IOException const&) {
         /* catch Stream I/O Errors here */
     }
 
@@ -95,23 +104,30 @@ void Sample::Render_Modes(WindowKey wk, Canvas canvas, View view, Model model, S
 
     SubwindowKit subwindowKit;
 
-    /* This block of code divides the screen into subsegments, includes geometry in the scene
-     * and sets different rendering options on each segment
-     * 1. To set a sub-window call the SetSubwindow method with the dimensions of the sub-window,
-     *		normalized between -1 and 1, with (-1, 1) pointing to the top left corner
+    /* This block of code divides the screen into subsegments, includes geometry
+     *in the scene and sets different rendering options on each segment
+     * 1. To set a sub-window call the SetSubwindow method with the dimensions
+     *of the sub-window, normalized between -1 and 1, with (-1, 1) pointing to
+     *the top left corner
      * 2. To include a segment into another segment use the following method:
      *		destinationSegmentKey.IncludeSegment(sourceSegmentKey)
-     *		including segments is a good way to add the same geometry in multiple places without
-     *		needlessly creating multiple copies of the geometry in question
-     * 3. Change the lighting interpolation algorithm used for a segment by using the
-     *		LightingAttributeControl::SetInterpolationAlgorithm() method
-     * 4. Segment attributes are changed as needed through the use of kits and controls
+     *		including segments is a good way to add the same geometry in
+     *multiple places without needlessly creating multiple copies of the
+     *geometry in question
+     * 3. Change the lighting interpolation algorithm used for a segment by
+     *using the LightingAttributeControl::SetInterpolationAlgorithm() method
+     * 4. Segment attributes are changed as needed through the use of kits and
+     *controls
      *
-     * NOTE: Lights do not shine through sub-windows, therefore it is necessary to insert a new light
-     *		per sub-window to see the results of the lighting algorithms*/
+     * NOTE: Lights do not shine through sub-windows, therefore it is necessary
+     *to insert a new light per sub-window to see the results of the lighting
+     *algorithms*/
     SegmentKey wireframeKey = modelKey.Subsegment();
     subwindowKit.SetSubwindow(HPS::Rectangle(-1, -0.33f, 0, 1));
-    wireframeKey.GetVisibilityControl().SetFaces(false).SetEdges(true).SetLights(false);
+    wireframeKey.GetVisibilityControl()
+        .SetFaces(false)
+        .SetEdges(true)
+        .SetLights(false);
     wireframeKey.IncludeSegment(urn);
     wireframeKey.SetSubwindow(subwindowKit);
     wireframeKey.SetVisibility(visibilityKit);
@@ -125,12 +141,14 @@ void Sample::Render_Modes(WindowKey wk, Canvas canvas, View view, Model model, S
     indexInterpolatedKey.SetSubwindow(subwindowKit);
     indexInterpolatedKey.GetColorInterpolationControl().SetFaceColor(true);
     indexInterpolatedKey.GetVisibilityControl().SetLights(true);
-    indexInterpolatedKey.InsertText(Point(0, 1.40f, 0), "Color Index Interpolated");
+    indexInterpolatedKey.InsertText(Point(0, 1.40f, 0),
+                                    "Color Index Interpolated");
 
     // Gouraud Shaded
     SegmentKey gouraudKey = modelKey.Subsegment();
     gouraudKey.InsertDistantLight(Vector(1, 1, 0));
-    gouraudKey.GetLightingAttributeControl().SetInterpolationAlgorithm(Lighting::InterpolationAlgorithm::Gouraud);
+    gouraudKey.GetLightingAttributeControl().SetInterpolationAlgorithm(
+        Lighting::InterpolationAlgorithm::Gouraud);
     subwindowKit.SetSubwindow(HPS::Rectangle(0.33f, 1, 0, 1));
     gouraudKey.IncludeSegment(urn);
     gouraudKey.SetSubwindow(subwindowKit);
@@ -140,11 +158,13 @@ void Sample::Render_Modes(WindowKey wk, Canvas canvas, View view, Model model, S
     // Hidden Surface and Lines
     SegmentKey hiddenSurfaceKey = modelKey.Subsegment();
     subwindowKit.SetSubwindow(HPS::Rectangle(-1, -0.33f, -1, 0));
-    visibilityKit.UnsetEverything().SetFaces(true).SetEdges(true).SetLights(false);
+    visibilityKit.UnsetEverything().SetFaces(true).SetEdges(true).SetLights(
+        false);
     hiddenSurfaceKey.IncludeSegment(urn);
     hiddenSurfaceKey.SetSubwindow(subwindowKit);
     hiddenSurfaceKey.SetVisibility(visibilityKit);
-    hiddenSurfaceKey.GetSubwindowControl().SetRenderingAlgorithm(Subwindow::RenderingAlgorithm::HiddenLine);
+    hiddenSurfaceKey.GetSubwindowControl().SetRenderingAlgorithm(
+        Subwindow::RenderingAlgorithm::HiddenLine);
     hiddenSurfaceKey.GetHiddenLineAttributeControl()
         .SetVisibility(false)
         .SetLinePattern("-  -  -")
@@ -155,7 +175,8 @@ void Sample::Render_Modes(WindowKey wk, Canvas canvas, View view, Model model, S
     // Flat Shaded
     SegmentKey flatKey = modelKey.Subsegment();
     flatKey.InsertDistantLight(Vector(1, 1, 0));
-    flatKey.GetLightingAttributeControl().SetInterpolationAlgorithm(Lighting::InterpolationAlgorithm::Flat);
+    flatKey.GetLightingAttributeControl().SetInterpolationAlgorithm(
+        Lighting::InterpolationAlgorithm::Flat);
     subwindowKit.SetSubwindow(HPS::Rectangle(-0.33f, 0.33f, -1, 0));
     flatKey.IncludeSegment(urn);
     flatKey.SetSubwindow(subwindowKit);
@@ -163,13 +184,13 @@ void Sample::Render_Modes(WindowKey wk, Canvas canvas, View view, Model model, S
 
     // Phong Shaded
     phongKey.InsertDistantLight(Vector(1, 1, 0));
-    phongKey.GetLightingAttributeControl().SetInterpolationAlgorithm(Lighting::InterpolationAlgorithm::Phong);
+    phongKey.GetLightingAttributeControl().SetInterpolationAlgorithm(
+        Lighting::InterpolationAlgorithm::Phong);
     phongKey.GetVisibilityControl().SetLights(true);
     subwindowKit.SetSubwindow(HPS::Rectangle(0.33f, 1, -1, 0));
     phongKey.IncludeSegment(urn);
     phongKey.SetSubwindow(subwindowKit);
     phongKey.InsertText(Point(0, 1.40f, 0), "Phong");
 
-
-	view.FitWorld().Update();
+    view.FitWorld().Update();
 }
