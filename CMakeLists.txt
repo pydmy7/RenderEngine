@@ -9,4 +9,5 @@ add_subdirectory(cmake)
 include(3rdlibs/findlibrary.cmake)
 add_subdirectory(3rdlibs)
 
+add_subdirectory(demo)
 add_subdirectory(renderengine)

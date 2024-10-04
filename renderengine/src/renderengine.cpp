@@ -5,6 +5,7 @@
 #include <QTimer>
 
 #include <hoops_license.h>
+#include <hps.h>
 #include <sprk_ops.h>
 
 #include <spdlog/spdlog.h>
@@ -181,6 +182,25 @@ void RenderEngine::init() {
         "RenderEngine"
     );
     canvas_.AttachViewAsLayout(view_);
+
+    render();
+}
+
+void RenderEngine::render() {
+    HPS::SegmentKey modelKey = model_.GetSegmentKey();
+
+    HPS::PointArray points {
+        HPS::Point{0, 0, 0},
+        HPS::Point{0, 1, 0},
+        HPS::Point{1, 1, 0},
+        HPS::Point{1, 0, 0},
+    };
+
+    HPS::IntArray faces {
+        4, 0, 1, 2, 3,
+    };
+
+    modelKey.InsertShell(points, faces);
 }
 
 }  // namespace RenderEngine

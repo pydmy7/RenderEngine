@@ -144,4 +144,4 @@ Checks: '-*,
 
 WarningsAsErrors: '*'
 
-HeaderFilterRegex: "^(?!.*3rdlibs/)"
+HeaderFilterRegex: "^(?!.*(3rdlibs/|demo/))"

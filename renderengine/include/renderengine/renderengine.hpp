@@ -36,7 +36,7 @@ private:
 
 private:
     HPS::World license_;
-    
+
     HPS::Model model_;
 	HPS::View view_;
     HPS::Canvas canvas_;
@@ -45,6 +45,7 @@ private:
 	HPS::MatrixKit pixelToWindowMatrix_;
 
     void init();
+    void render();
 };
 
 }  // namespace RenderEngine
