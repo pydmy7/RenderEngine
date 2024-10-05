@@ -7,8 +7,6 @@
 #include <hps.h>
 #include <sprk_ops.h>
 
-#include <spdlog/spdlog.h>
-
 namespace RenderEngine {
 
 RenderEngine::RenderEngine(QWidget* parent)
