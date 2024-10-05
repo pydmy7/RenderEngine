@@ -1,5 +1,5 @@
 function(useClangFormat target directory)
-    message("clang-format ${directory}")
+    message(STATUS "[INFO] clang-format -> ${directory}")
 
     find_program(CLANG-FORMAT_PATH clang-format REQUIRED)
     set(EXPRESSION h hpp hh c cc cxx cpp)
