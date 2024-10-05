@@ -199,6 +199,7 @@ void RenderEngine::render() {
     // clang-format on
 
     mainSegmentKey.InsertShell(points, faces);
+    // mainSegmentKey.InsertLine(points);
 }
 
 }  // namespace RenderEngine
