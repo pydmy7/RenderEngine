@@ -1,5 +1,5 @@
 function(useClangTidy target)
-    message("clang-tidy ${target}")
+    message(STATUS "[INFO] clang-tidy -> ${target}")
 
     find_program(CLANG-TIDY_PATH clang-tidy REQUIRED)
     set_target_properties(
