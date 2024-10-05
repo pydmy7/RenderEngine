@@ -185,20 +185,20 @@ void RenderEngine::init() {
 }
 
 void RenderEngine::render() {
-    HPS::SegmentKey modelKey = model_.GetSegmentKey();
+    HPS::SegmentKey mainSegmentKey = model_.GetSegmentKey();
 
+    // clang-format off
     HPS::PointArray points{
         HPS::Point{0, 0, 0},
         HPS::Point{0, 1, 0},
-        HPS::Point{1, 1, 0},
         HPS::Point{1, 0, 0},
     };
-
     HPS::IntArray faces{
-        4, 0, 1, 2, 3,
+        3, 0, 1, 2,
     };
+    // clang-format on
 
-    modelKey.InsertShell(points, faces);
+    mainSegmentKey.InsertShell(points, faces);
 }
 
 }  // namespace RenderEngine
