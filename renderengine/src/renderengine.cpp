@@ -165,7 +165,7 @@ void RenderEngine::init() {
     QWidget::setFocusPolicy(Qt::StrongFocus);
     QWidget::setBackgroundRole(QPalette::NoRole);
     QWidget::setAcceptDrops(true);
-    this->setFixedSize(1000, 700);
+    this->resize(1000, 700);
 
     model_ = HPS::Factory::CreateModel();
 
@@ -193,13 +193,13 @@ void RenderEngine::render() {
         HPS::Point{0, 1, 0},
         HPS::Point{1, 0, 0},
     };
-    HPS::IntArray faces{
-        3, 0, 1, 2,
-    };
     // clang-format on
 
-    mainSegmentKey.InsertShell(points, faces);
-    // mainSegmentKey.InsertLine(points);
+    mainSegmentKey.InsertLine(points);
+    mainSegmentKey.GetVisibilityControl().SetLines(true);
+    mainSegmentKey.GetLineAttributeControl().SetWeight(3);
+
+    canvas_.Update();
 }
 
 }  // namespace RenderEngine
