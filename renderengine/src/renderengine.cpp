@@ -6,8 +6,6 @@
 #include <hoops_license.h>
 #include <sprk_ops.h>
 
-#include <spdlog/spdlog.h>
-
 namespace RenderEngine {
 
 RenderEngine::RenderEngine(QWidget* parent)
@@ -164,7 +162,7 @@ void RenderEngine::init() {
     QWidget::setFocusPolicy(Qt::StrongFocus);
     QWidget::setBackgroundRole(QPalette::NoRole);
     QWidget::setAcceptDrops(true);
-    this->setFixedSize(1000, 700);
+    this->resize(1000, 700);
 
     model_ = HPS::Factory::CreateModel();
 
