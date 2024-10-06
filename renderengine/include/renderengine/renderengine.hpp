@@ -48,7 +48,11 @@ private:
     HPS::MatrixKit pixelToWindowMatrix_;
 
     void init();
-    void render();
+
+    void render() const;
+    HPS::SegmentKey getSegmentKeyPort() const;
+    HPS::SegmentKey getSegmentKeyLine() const;
+    HPS::SegmentKey getSegmentKeyCone() const;
 };
 
 }  // namespace RenderEngine

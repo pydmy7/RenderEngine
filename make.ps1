@@ -5,8 +5,8 @@ param (
 clear
 echo "clear"
 
-echo "`nRemove-Item -Path ./build -Recurse -Force"
-Remove-Item -Path ./build -Recurse -Force
+# echo "`nRemove-Item -Path ./build -Recurse -Force"
+# Remove-Item -Path ./build -Recurse -Force
 
 if ($compiler -eq "Clang") {
     echo "`nsource: cmake -S . -B build -G Ninja"
