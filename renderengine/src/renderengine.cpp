@@ -4,7 +4,10 @@
 #include <QWheelEvent>
 
 #include <hoops_license.h>
+#include <hps.h>
 #include <sprk_ops.h>
+
+#include <spdlog/spdlog.h>
 
 namespace RenderEngine {
 
@@ -173,10 +176,80 @@ void RenderEngine::init() {
         .Push(new HPS::ZoomOperator(HPS::MouseButtons::ButtonMiddle()))
         .Push(new HPS::PanOperator(HPS::MouseButtons::ButtonRight()))
         .Push(new HPS::OrbitOperator(HPS::MouseButtons::ButtonLeft()));
+    view_.GetAxisTriadControl().SetVisibility(true).SetLocation(
+        HPS::AxisTriadControl::Location::BottomRight);
+    view_.GetNavigationCubeControl().SetVisibility(true).SetLocation(
+        HPS::NavigationCubeControl::Location::BottomLeft);
 
     canvas_ = HPS::Factory::CreateCanvas(
         static_cast<HPS::WindowHandle>(this->winId()), "RenderEngine");
     canvas_.AttachViewAsLayout(view_);
+
+    render();
+}
+
+void RenderEngine::render() const {
+    auto port = getSegmentKeyPort();
+    port.SetName("Port");
+
+    HPS::SegmentKey root = model_.GetSegmentKey();
+    root.IncludeSegment(port);
+}
+
+HPS::SegmentKey RenderEngine::getSegmentKeyPort() const {
+    auto line = getSegmentKeyLine();
+    line.GetMaterialMappingControl().SetLineColor(HPS::RGBColor(0, 0, 1));
+
+    auto cone = getSegmentKeyCone();
+    cone.GetMaterialMappingControl().SetFaceColor(HPS::RGBColor(1, 0, 0));
+
+    auto root = HPS::Database::CreateRootSegment();
+    root.IncludeSegment(line);
+    root.IncludeSegment(cone);
+
+    return root;
+}
+
+HPS::SegmentKey RenderEngine::getSegmentKeyLine() const {
+    // clang-format off
+    HPS::PointArray points{
+        HPS::Point{0, 0, 0},
+        HPS::Point{1, 0, 0},
+    };
+    // clang-format on
+
+    HPS::LineKit line;
+    line.SetPoints(points);
+
+    auto root = HPS::Database::CreateRootSegment();
+    root.InsertLine(line);
+    root.GetVisibilityControl().SetLines(true);
+    root.GetLineAttributeControl().SetWeight(5);
+
+    return root;
+}
+
+HPS::SegmentKey RenderEngine::getSegmentKeyCone() const {
+    // clang-format off
+    HPS::PointArray points{
+        HPS::Point{0.25, 0, 0},
+        HPS::Point{0.5, 0, 0},
+    };
+    HPS::FloatArray radii{
+        0, 0.25,
+    };
+    // clang-format on
+
+    HPS::CylinderKit cone;
+    cone.SetPoints(points);
+    cone.SetRadii(radii);
+    cone.SetCaps(HPS::Cylinder::Capping::Both);
+
+    auto root = HPS::Database::CreateRootSegment();
+    root.InsertCylinder(cone);
+    root.GetVisibilityControl().SetEdges(true);
+
+    return root;
 }
 
 }  // namespace RenderEngine
