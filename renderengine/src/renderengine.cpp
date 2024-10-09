@@ -192,8 +192,12 @@ void RenderEngine::render() const {
     auto port = getSegmentKeyPort();
     port.SetName("Port");
 
+    auto transparentFace = getTransparentFace();
+    transparentFace.SetName("TransparentFace");
+
     HPS::SegmentKey root = model_.GetSegmentKey();
     root.IncludeSegment(port);
+    root.IncludeSegment(transparentFace);
 }
 
 HPS::SegmentKey RenderEngine::getSegmentKeyPort() const {
@@ -248,6 +252,24 @@ HPS::SegmentKey RenderEngine::getSegmentKeyCone() const {
     auto root = HPS::Database::CreateRootSegment();
     root.InsertCylinder(cone);
     root.GetVisibilityControl().SetEdges(true);
+
+    return root;
+}
+
+HPS::SegmentKey RenderEngine::getTransparentFace() const {
+    HPS::PointArray points{
+        HPS::Point{0, 0, 0},
+        HPS::Point{1, 0, 0},
+        HPS::Point{1, 1, 0},
+        HPS::Point{0, 1, 0},
+    };
+
+    HPS::PolygonKit polygon;
+    polygon.SetPoints(points);
+
+    auto root = HPS::Database::CreateRootSegment();
+    root.InsertPolygon(polygon);
+    root.GetMaterialMappingControl().SetFaceAlpha(0.5);
 
     return root;
 }

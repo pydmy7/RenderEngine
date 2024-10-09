@@ -53,6 +53,7 @@ private:
     HPS::SegmentKey getSegmentKeyPort() const;
     HPS::SegmentKey getSegmentKeyLine() const;
     HPS::SegmentKey getSegmentKeyCone() const;
+    HPS::SegmentKey getTransparentFace() const;
 };
 
 }  // namespace RenderEngine
