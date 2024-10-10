@@ -7,7 +7,7 @@
 
 namespace RenderEngine {
 
-class RenderEngine : public QWidget {
+class RenderEngine final : public QWidget {
     Q_OBJECT
 
 public:
