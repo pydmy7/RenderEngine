@@ -8,6 +8,6 @@ function(useClangFormat target directory)
         LIST_DIRECTORIES false ${EXPRESSION}
     )
     add_custom_command(TARGET ${target} PRE_BUILD COMMAND
-        ${CLANG-FORMAT_PATH} -i --style=file ${SOURCE_FILES}
+        ${CLANG-FORMAT_PATH} --style=file -i ${SOURCE_FILES}
     )
 endfunction()
