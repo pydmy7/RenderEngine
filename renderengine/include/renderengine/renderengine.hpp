@@ -50,10 +50,16 @@ private:
     void init();
 
     void render() const;
-    HPS::SegmentKey getSegmentKeyPort() const;
-    HPS::SegmentKey getSegmentKeyLine() const;
-    HPS::SegmentKey getSegmentKeyCone() const;
-    HPS::SegmentKey getTransparentFace() const;
+
+    HPS::SegmentKey getLinePort(HPS::Point p1, HPS::Point p2) const;
+    HPS::SegmentKey getFacePort(HPS::Point p1, HPS::Point p2, HPS::Point o1,
+                                HPS::Point o2) const;
+
+    HPS::SegmentKey getLine(HPS::Point p1, HPS::Point p2) const;
+    HPS::SegmentKey getCone(HPS::Point p1, HPS::Point p2) const;
+    HPS::SegmentKey getTransparentFace(const HPS::PointArray& points) const;
+
+    HPS::Point getTranslatePoint(HPS::Point p, HPS::Vector v, double len) const;
 };
 
 }  // namespace RenderEngine

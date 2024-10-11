@@ -189,22 +189,23 @@ void RenderEngine::init() {
 }
 
 void RenderEngine::render() const {
-    auto port = getSegmentKeyPort();
-    port.SetName("Port");
+    auto linePort = getLinePort(HPS::Point{0, 0, 0}, HPS::Point{-1, -1, -1});
+    linePort.SetName("LinePort");
 
-    auto transparentFace = getTransparentFace();
-    transparentFace.SetName("TransparentFace");
+    auto facePort = getFacePort(HPS::Point{0, 0, 1}, HPS::Point{0, 1, 1},
+                                HPS::Point{1, 0, 1}, HPS::Point{1, 1, 1});
+    facePort.SetName("FacePort");
 
     HPS::SegmentKey root = model_.GetSegmentKey();
-    root.IncludeSegment(port);
-    root.IncludeSegment(transparentFace);
+    root.IncludeSegment(linePort);
+    root.IncludeSegment(facePort);
 }
 
-HPS::SegmentKey RenderEngine::getSegmentKeyPort() const {
-    auto line = getSegmentKeyLine();
+HPS::SegmentKey RenderEngine::getLinePort(HPS::Point p1, HPS::Point p2) const {
+    auto line = getLine(p1, p2);
     line.GetMaterialMappingControl().SetLineColor(HPS::RGBColor(0, 0, 1));
 
-    auto cone = getSegmentKeyCone();
+    auto cone = getCone(p1, p2);
     cone.GetMaterialMappingControl().SetFaceColor(HPS::RGBColor(1, 0, 0));
 
     auto root = HPS::Database::CreateRootSegment();
@@ -214,11 +215,30 @@ HPS::SegmentKey RenderEngine::getSegmentKeyPort() const {
     return root;
 }
 
-HPS::SegmentKey RenderEngine::getSegmentKeyLine() const {
+HPS::SegmentKey RenderEngine::getFacePort(HPS::Point p1, HPS::Point p2,
+                                          HPS::Point o1, HPS::Point o2) const {
+    auto transparentFace = getTransparentFace(HPS::PointArray{p1, p2, o2, o1});
+    // auto linePort = getLinePort((p1 + p2) / 2, (o1 + o2) / 2);
+    // auto line = getLine((p1 + o1) / 2, (p2 + o2) / 2);
+    auto linePort = getLinePort(
+        HPS::Point{(p1.x + p2.x) / 2, (p1.y + p2.y) / 2, (p1.z + p2.z) / 2},
+        HPS::Point{(o1.x + o2.x) / 2, (o1.y + o2.y) / 2, (o1.z + o2.z) / 2});
+    auto line = getLine(
+        HPS::Point{(p1.x + o1.x) / 2, (p1.y + o1.y) / 2, (p1.z + o1.z) / 2},
+        HPS::Point{(p2.x + o2.x) / 2, (p2.y + o2.y) / 2, (p2.z + o2.z) / 2});
+
+    auto root = HPS::Database::CreateRootSegment();
+    root.IncludeSegment(transparentFace);
+    root.IncludeSegment(linePort);
+    root.IncludeSegment(line);
+
+    return root;
+}
+
+HPS::SegmentKey RenderEngine::getLine(HPS::Point p1, HPS::Point p2) const {
     // clang-format off
     HPS::PointArray points{
-        HPS::Point{0, 0, 0},
-        HPS::Point{1, 0, 0},
+        p1, p2
     };
     // clang-format on
 
@@ -233,14 +253,17 @@ HPS::SegmentKey RenderEngine::getSegmentKeyLine() const {
     return root;
 }
 
-HPS::SegmentKey RenderEngine::getSegmentKeyCone() const {
+HPS::SegmentKey RenderEngine::getCone(HPS::Point p1, HPS::Point p2) const {
+    HPS::Point centerPoint{(p1.x + p2.x) / 2, (p1.y + p2.y) / 2,
+                           (p1.z + p2.z) / 2};
+
     // clang-format off
     HPS::PointArray points{
-        HPS::Point{0.25, 0, 0},
-        HPS::Point{0.5, 0, 0},
+        getTranslatePoint(centerPoint, HPS::Vector{p1 - p2}, 0.125),
+        getTranslatePoint(centerPoint, HPS::Vector{p2 - p1}, 0.125)
     };
     HPS::FloatArray radii{
-        0, 0.25,
+        0, 0.25
     };
     // clang-format on
 
@@ -251,19 +274,12 @@ HPS::SegmentKey RenderEngine::getSegmentKeyCone() const {
 
     auto root = HPS::Database::CreateRootSegment();
     root.InsertCylinder(cone);
-    root.GetVisibilityControl().SetEdges(true);
 
     return root;
 }
 
-HPS::SegmentKey RenderEngine::getTransparentFace() const {
-    HPS::PointArray points{
-        HPS::Point{0, 0, 0},
-        HPS::Point{1, 0, 0},
-        HPS::Point{1, 1, 0},
-        HPS::Point{0, 1, 0},
-    };
-
+HPS::SegmentKey RenderEngine::getTransparentFace(
+    const HPS::PointArray& points) const {
     HPS::PolygonKit polygon;
     polygon.SetPoints(points);
 
@@ -272,6 +288,14 @@ HPS::SegmentKey RenderEngine::getTransparentFace() const {
     root.GetMaterialMappingControl().SetFaceAlpha(0.5);
 
     return root;
+}
+
+HPS::Point RenderEngine::getTranslatePoint(HPS::Point p, HPS::Vector v,
+                                           double len) const {
+    v = v.Normalize();
+    return HPS::Point{static_cast<float>(p.x + v.x * len),
+                      static_cast<float>(p.y + v.y * len),
+                      static_cast<float>(p.z + v.z * len)};
 }
 
 }  // namespace RenderEngine
