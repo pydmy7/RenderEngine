@@ -5,6 +5,8 @@
 #include <hps.h>
 #include <sprk.h>
 
+#include "renderengine/types.hpp"
+
 namespace RenderEngine {
 
 class RenderEngine final : public QWidget {
@@ -52,8 +54,11 @@ private:
     void render() const;
 
     HPS::SegmentKey getLinePort(HPS::Point p1, HPS::Point p2) const;
-    HPS::SegmentKey getFacePort(HPS::Point p1, HPS::Point p2, HPS::Point o1,
-                                HPS::Point o2) const;
+    HPS::SegmentKey getQuadrilateralFacePort(HPS::Point p1, HPS::Point p2,
+                                             HPS::Point o1,
+                                             HPS::Point o2) const;
+    // HPS::SegmentKey getHoopFacePort(types::Circle<float> circle1,
+    // types::Circle<float> circle2) const;
 
     HPS::SegmentKey getLine(HPS::Point p1, HPS::Point p2) const;
     HPS::SegmentKey getCone(HPS::Point p1, HPS::Point p2) const;

@@ -192,8 +192,9 @@ void RenderEngine::render() const {
     auto linePort = getLinePort(HPS::Point{0, 0, 0}, HPS::Point{-1, -1, -1});
     linePort.SetName("LinePort");
 
-    auto facePort = getFacePort(HPS::Point{0, 0, 1}, HPS::Point{0, 1, 1},
-                                HPS::Point{1, 0, 1}, HPS::Point{1, 1, 1});
+    auto facePort =
+        getQuadrilateralFacePort(HPS::Point{0, 0, 1}, HPS::Point{0, 1, 1},
+                                 HPS::Point{1, 0, 1}, HPS::Point{1, 1, 1});
     facePort.SetName("FacePort");
 
     HPS::SegmentKey root = model_.GetSegmentKey();
@@ -215,8 +216,10 @@ HPS::SegmentKey RenderEngine::getLinePort(HPS::Point p1, HPS::Point p2) const {
     return root;
 }
 
-HPS::SegmentKey RenderEngine::getFacePort(HPS::Point p1, HPS::Point p2,
-                                          HPS::Point o1, HPS::Point o2) const {
+HPS::SegmentKey RenderEngine::getQuadrilateralFacePort(HPS::Point p1,
+                                                       HPS::Point p2,
+                                                       HPS::Point o1,
+                                                       HPS::Point o2) const {
     auto transparentFace = getTransparentFace(HPS::PointArray{p1, p2, o2, o1});
     // auto linePort = getLinePort((p1 + p2) / 2, (o1 + o2) / 2);
     // auto line = getLine((p1 + o1) / 2, (p2 + o2) / 2);
@@ -297,5 +300,10 @@ HPS::Point RenderEngine::getTranslatePoint(HPS::Point p, HPS::Vector v,
                       static_cast<float>(p.y + v.y * len),
                       static_cast<float>(p.z + v.z * len)};
 }
+
+// HPS::SegmentKey RenderEngine::getHoopFacePort(types::Circle<float> circle1,
+// types::Circle<float> circle2) const {
+//     // assert contains otherwise swap
+// }
 
 }  // namespace RenderEngine
