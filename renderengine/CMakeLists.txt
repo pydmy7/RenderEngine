@@ -2,6 +2,7 @@ set(target renderengine)
 
 addExecutable(${target})
 target_link_libraries(${target} PRIVATE
+    toml++
     spdlog::spdlog
     Qt5::All
     hps::hps

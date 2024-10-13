@@ -4,7 +4,11 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 
+#include <toml++/toml.hpp>
+
 #include <QApplication>
+
+#include <fstream>
 
 #include "renderengine/renderengine.hpp"
 
@@ -18,6 +22,18 @@ auto initLog = []() -> int {
     auto logger =
         std::make_shared<spdlog::logger>("master", sinks.begin(), sinks.end());
     spdlog::set_default_logger(logger);
+
+    return 0;
+}();
+
+auto initConfig = []() -> int {
+    toml::table config;
+    config.insert_or_assign("RenderEngine", toml::table{
+                                                {"backend", "hoops"}
+    });
+
+    std::ofstream file(BINARY_DIR / "config.toml");
+    file << config;
 
     return 0;
 }();
