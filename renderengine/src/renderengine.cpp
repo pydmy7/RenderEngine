@@ -1,6 +1,7 @@
 #include "renderengine/renderengine.hpp"
 
 #include <QApplication>
+#include <QVector3D>
 #include <QWheelEvent>
 
 #include <hoops_license.h>
@@ -309,22 +310,27 @@ HPS::Point RenderEngine::getTranslatePoint(HPS::Point p, HPS::Vector v,
 HPS::SegmentKey RenderEngine::getHoopFacePort() const {
     // assert contains otherwise swap
 
-    // clang-format off
-    HPS::PointArray points{
-        HPS::Point(0, 0, 0),
-        HPS::Point(3, 0, 0),
-        HPS::Point(3, 3, 0),
-        HPS::Point(0, 3, 0),
-        HPS::Point(1, 1, 0),
-        HPS::Point(2, 1, 0),
-        HPS::Point(2, 2, 0),
-        HPS::Point(1, 2, 0)
-    };
-    HPS::IntArray faces{
-        4, 0, 1, 2, 3,
-        -3, 4, 5, 6
-    };
-    // clang-format on
+    HPS::PointArray points{};
+    auto ellipse1 = calculateEllipsePoints(QVector3D{1, 2, 3},
+                                           QVector3D{2, 3, 4}, 5.0, 3.0, 100);
+    auto ellipse2 = calculateEllipsePoints(QVector3D{1, 2, 3},
+                                           QVector3D{2, 3, 4}, 2.0, 2.0, 100);
+    for (auto&& point : ellipse1) {
+        points.emplace_back(point.x(), point.y(), point.z());
+    }
+    for (auto&& point : ellipse2) {
+        points.emplace_back(point.x(), point.y(), point.z());
+    }
+
+    HPS::IntArray faces{};
+    faces.emplace_back(100);
+    for (int i = 0; i < 100; ++i) {
+        faces.emplace_back(i);
+    }
+    faces.emplace_back(-100);
+    for (int i = 100; i < 200; ++i) {
+        faces.emplace_back(i);
+    }
 
     HPS::ShellKit shell;
     shell.SetPoints(points);
@@ -334,6 +340,32 @@ HPS::SegmentKey RenderEngine::getHoopFacePort() const {
     root.InsertShell(shell);
 
     return root;
+}
+
+std::vector<QVector3D> RenderEngine::calculateEllipsePoints(
+    const QVector3D& center, QVector3D normal, double a, double b,
+    int numPoints) const {
+    normal.normalize();
+
+    QVector3D w(0, 0, 1);
+    if (std::abs(normal.x()) < 1e-6 && std::abs(normal.y()) < 1e-6) {
+        w = QVector3D(1, 0, 0);
+    }
+
+    QVector3D u = QVector3D::crossProduct(w, normal).normalized();
+    QVector3D v = QVector3D::crossProduct(normal, u).normalized();
+
+    std::vector<QVector3D> points;
+    points.reserve(numPoints);
+
+    for (int i = 0; i < numPoints; ++i) {
+        double theta = 2.0 * std::acos(-1) * i / numPoints;
+        QVector3D point =
+            center + u * (a * std::cos(theta)) + v * (b * std::sin(theta));
+        points.push_back(point);
+    }
+
+    return points;
 }
 
 }  // namespace RenderEngine

@@ -64,6 +64,10 @@ private:
     HPS::SegmentKey getTransparentFace(const HPS::PointArray& points) const;
 
     HPS::Point getTranslatePoint(HPS::Point p, HPS::Vector v, double len) const;
+    std::vector<QVector3D> calculateEllipsePoints(const QVector3D& center,
+                                                  QVector3D normal, double a,
+                                                  double b,
+                                                  int numPoints) const;
 };
 
 }  // namespace RenderEngine
