@@ -189,17 +189,22 @@ void RenderEngine::init() {
 }
 
 void RenderEngine::render() const {
-    auto linePort = getLinePort(HPS::Point{0, 0, 0}, HPS::Point{-1, -1, -1});
-    linePort.SetName("LinePort");
+    // auto linePort = getLinePort(HPS::Point{0, 0, 0}, HPS::Point{-1, -1, -1});
+    // linePort.SetName("LinePort");
 
-    auto facePort =
-        getQuadrilateralFacePort(HPS::Point{0, 0, 1}, HPS::Point{0, 1, 1},
-                                 HPS::Point{1, 0, 1}, HPS::Point{1, 1, 1});
-    facePort.SetName("FacePort");
+    // auto facePort =
+    //     getQuadrilateralFacePort(HPS::Point{0, 0, 1}, HPS::Point{0, 1, 1},
+    //                              HPS::Point{1, 0, 1}, HPS::Point{1, 1, 1});
+    // facePort.SetName("FacePort");
+
+    // HPS::SegmentKey root = model_.GetSegmentKey();
+    // root.IncludeSegment(linePort);
+    // root.IncludeSegment(facePort);
+
+    auto hoop = getHoopFacePort();
 
     HPS::SegmentKey root = model_.GetSegmentKey();
-    root.IncludeSegment(linePort);
-    root.IncludeSegment(facePort);
+    root.IncludeSegment(hoop);
 }
 
 HPS::SegmentKey RenderEngine::getLinePort(HPS::Point p1, HPS::Point p2) const {
@@ -301,9 +306,34 @@ HPS::Point RenderEngine::getTranslatePoint(HPS::Point p, HPS::Vector v,
                       static_cast<float>(p.z + v.z * len)};
 }
 
-// HPS::SegmentKey RenderEngine::getHoopFacePort(types::Circle<float> circle1,
-// types::Circle<float> circle2) const {
-//     // assert contains otherwise swap
-// }
+HPS::SegmentKey RenderEngine::getHoopFacePort() const {
+    // assert contains otherwise swap
+
+    // clang-format off
+    HPS::PointArray points{
+        HPS::Point(0, 0, 0),
+        HPS::Point(3, 0, 0),
+        HPS::Point(3, 3, 0),
+        HPS::Point(0, 3, 0),
+        HPS::Point(1, 1, 0),
+        HPS::Point(2, 1, 0),
+        HPS::Point(2, 2, 0),
+        HPS::Point(1, 2, 0)
+    };
+    HPS::IntArray faces{
+        4, 0, 1, 2, 3,
+        -3, 4, 5, 6
+    };
+    // clang-format on
+
+    HPS::ShellKit shell;
+    shell.SetPoints(points);
+    shell.SetFacelist(faces);
+
+    auto root = HPS::Database::CreateRootSegment();
+    root.InsertShell(shell);
+
+    return root;
+}
 
 }  // namespace RenderEngine

@@ -57,8 +57,7 @@ private:
     HPS::SegmentKey getQuadrilateralFacePort(HPS::Point p1, HPS::Point p2,
                                              HPS::Point o1,
                                              HPS::Point o2) const;
-    // HPS::SegmentKey getHoopFacePort(types::Circle<float> circle1,
-    // types::Circle<float> circle2) const;
+    HPS::SegmentKey getHoopFacePort() const;
 
     HPS::SegmentKey getLine(HPS::Point p1, HPS::Point p2) const;
     HPS::SegmentKey getCone(HPS::Point p1, HPS::Point p2) const;
