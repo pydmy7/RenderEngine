@@ -62,6 +62,8 @@ private:
 
     HPS::SegmentKey getLine(HPS::Point p1, HPS::Point p2) const;
     HPS::SegmentKey getCone(HPS::Point p1, HPS::Point p2) const;
+    HPS::SegmentKey getAverageLines(types::Ellipse ellipse1,
+                                    types::Ellipse ellipse2) const;
     HPS::SegmentKey getTransparentFace(HPS::PointArray points) const;
     HPS::SegmentKey getTransparentFace(types::Ellipse ellipse1,
                                        types::Ellipse ellipse2) const;

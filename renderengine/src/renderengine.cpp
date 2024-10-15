@@ -7,6 +7,7 @@
 
 #include <hoops_license.h>
 #include <hps.h>
+#include <numbers>
 #include <sprk_ops.h>
 
 #include <limits>
@@ -262,9 +263,12 @@ HPS::SegmentKey RenderEngine::getHoopFacePort(types::Ellipse ellipse1,
     auto [point1, point2] = getClosestPointPair(ellipse1, ellipse2);
     auto linePort = getLinePort(point1, point2);
 
+    auto lines = getAverageLines(ellipse1, ellipse2);
+
     auto root = HPS::Database::CreateRootSegment();
     root.IncludeSegment(transparentFace);
     root.IncludeSegment(linePort);
+    root.IncludeSegment(lines);
 
     return root;
 }
@@ -308,6 +312,35 @@ HPS::SegmentKey RenderEngine::getCone(HPS::Point p1, HPS::Point p2) const {
 
     auto root = HPS::Database::CreateRootSegment();
     root.InsertCylinder(cone);
+
+    return root;
+}
+
+HPS::SegmentKey RenderEngine::getAverageLines(types::Ellipse ellipse1,
+                                              types::Ellipse ellipse2) const {
+    if (std::numbers::pi * ellipse1.major * ellipse1.minor <
+        std::numbers::pi * ellipse2.major * ellipse2.minor) {
+        std::swap(ellipse1, ellipse2);
+    }
+
+    auto polygon1 = getEllipsePolygonPoints(ellipse1);
+    auto polygon2 = getEllipsePolygonPoints(ellipse2);
+    assert(polygon1.size() == polygon2.size());
+
+    HPS::PointArray polygon(polygon1.size());
+    for (int n = polygon1.size(), i = 0; i < n; ++i) {
+        auto point = (polygon1[i] + polygon2[i]) / 2;
+        polygon[i] = HPS::Point{point.x(), point.y(), point.z()};
+    }
+    polygon.emplace_back(polygon.front());
+
+    HPS::LineKit lineKit;
+    lineKit.SetPoints(polygon);
+
+    auto root = HPS::Database::CreateRootSegment();
+    root.InsertLine(lineKit);
+    root.GetVisibilityControl().SetLines(true);
+    root.GetLineAttributeControl().SetWeight(5);
 
     return root;
 }
