@@ -1,4 +1,5 @@
 #include "renderengine/renderengine.hpp"
+#include "renderengine/types.hpp"
 
 #include <QApplication>
 #include <QVector3D>
@@ -7,6 +8,9 @@
 #include <hoops_license.h>
 #include <hps.h>
 #include <sprk_ops.h>
+
+#include <limits>
+#include <utility>
 
 #include <spdlog/spdlog.h>
 
@@ -190,22 +194,27 @@ void RenderEngine::init() {
 }
 
 void RenderEngine::render() const {
-    // auto linePort = getLinePort(HPS::Point{0, 0, 0}, HPS::Point{-1, -1, -1});
-    // linePort.SetName("LinePort");
+    auto linePort = getLinePort(HPS::Point{0, 0, 0}, HPS::Point{-1, -1, -1});
+    linePort.SetName("LinePort");
 
-    // auto facePort =
-    //     getQuadrilateralFacePort(HPS::Point{0, 0, 1}, HPS::Point{0, 1, 1},
-    //                              HPS::Point{1, 0, 1}, HPS::Point{1, 1, 1});
-    // facePort.SetName("FacePort");
+    auto quadrilateralFacePort =
+        getQuadrilateralFacePort(HPS::Point{0, 0, 1}, HPS::Point{0, 1, 1},
+                                 HPS::Point{1, 0, 1}, HPS::Point{1, 1, 1});
+    quadrilateralFacePort.SetName("QuadrilateralFacePort");
 
-    // HPS::SegmentKey root = model_.GetSegmentKey();
-    // root.IncludeSegment(linePort);
-    // root.IncludeSegment(facePort);
-
-    auto hoop = getHoopFacePort();
+    auto hoopFacePort = getHoopFacePort(
+        types::Ellipse{
+            QVector3D{1, 2, 3},
+            QVector3D{2, 3, 4},
+            5.0, 3.0, 100
+    },
+        types::Ellipse{QVector3D{1, 2, 3}, QVector3D{2, 3, 4}, 2.0, 2.0, 100});
+    hoopFacePort.SetName("HoopFacePort");
 
     HPS::SegmentKey root = model_.GetSegmentKey();
-    root.IncludeSegment(hoop);
+    root.IncludeSegment(linePort);
+    root.IncludeSegment(quadrilateralFacePort);
+    root.IncludeSegment(hoopFacePort);
 }
 
 HPS::SegmentKey RenderEngine::getLinePort(HPS::Point p1, HPS::Point p2) const {
@@ -244,6 +253,22 @@ HPS::SegmentKey RenderEngine::getQuadrilateralFacePort(HPS::Point p1,
     return root;
 }
 
+HPS::SegmentKey RenderEngine::getHoopFacePort(types::Ellipse ellipse1,
+                                              types::Ellipse ellipse2) const {
+    // assert contains otherwise swap
+
+    auto transparentFace = getTransparentFace(ellipse1, ellipse2);
+
+    auto [point1, point2] = getClosestPointPair(ellipse1, ellipse2);
+    auto linePort = getLinePort(point1, point2);
+
+    auto root = HPS::Database::CreateRootSegment();
+    root.IncludeSegment(transparentFace);
+    root.IncludeSegment(linePort);
+
+    return root;
+}
+
 HPS::SegmentKey RenderEngine::getLine(HPS::Point p1, HPS::Point p2) const {
     // clang-format off
     HPS::PointArray points{
@@ -268,8 +293,8 @@ HPS::SegmentKey RenderEngine::getCone(HPS::Point p1, HPS::Point p2) const {
 
     // clang-format off
     HPS::PointArray points{
-        getTranslatePoint(centerPoint, HPS::Vector{p1 - p2}, 0.125),
-        getTranslatePoint(centerPoint, HPS::Vector{p2 - p1}, 0.125)
+        centerPoint + HPS::Vector{p1 - p2}.Normalize() * 0.125,
+        centerPoint + HPS::Vector{p2 - p1}.Normalize() * 0.125
     };
     HPS::FloatArray radii{
         0, 0.25
@@ -287,8 +312,7 @@ HPS::SegmentKey RenderEngine::getCone(HPS::Point p1, HPS::Point p2) const {
     return root;
 }
 
-HPS::SegmentKey RenderEngine::getTransparentFace(
-    const HPS::PointArray& points) const {
+HPS::SegmentKey RenderEngine::getTransparentFace(HPS::PointArray points) const {
     HPS::PolygonKit polygon;
     polygon.SetPoints(points);
 
@@ -299,27 +323,15 @@ HPS::SegmentKey RenderEngine::getTransparentFace(
     return root;
 }
 
-HPS::Point RenderEngine::getTranslatePoint(HPS::Point p, HPS::Vector v,
-                                           double len) const {
-    v = v.Normalize();
-    return HPS::Point{static_cast<float>(p.x + v.x * len),
-                      static_cast<float>(p.y + v.y * len),
-                      static_cast<float>(p.z + v.z * len)};
-}
-
-HPS::SegmentKey RenderEngine::getHoopFacePort() const {
-    // assert contains otherwise swap
-
+HPS::SegmentKey RenderEngine::getTransparentFace(
+    types::Ellipse ellipse1, types::Ellipse ellipse2) const {
     HPS::PointArray points{};
-    auto ellipse1 = calculateEllipsePoints(QVector3D{1, 2, 3},
-                                           QVector3D{2, 3, 4}, 5.0, 3.0, 100);
-    auto ellipse2 = calculateEllipsePoints(QVector3D{1, 2, 3},
-                                           QVector3D{2, 3, 4}, 2.0, 2.0, 100);
-    for (auto&& point : ellipse1) {
-        points.emplace_back(point.x(), point.y(), point.z());
-    }
-    for (auto&& point : ellipse2) {
-        points.emplace_back(point.x(), point.y(), point.z());
+    for (auto ellipse : {ellipse1, ellipse2}) {
+        auto polygon = getEllipsePolygonPoints(ellipse);
+
+        for (auto point : polygon) {
+            points.emplace_back(point.x(), point.y(), point.z());
+        }
     }
 
     HPS::IntArray faces{};
@@ -338,13 +350,15 @@ HPS::SegmentKey RenderEngine::getHoopFacePort() const {
 
     auto root = HPS::Database::CreateRootSegment();
     root.InsertShell(shell);
+    root.GetMaterialMappingControl().SetFaceAlpha(0.5);
 
     return root;
 }
 
-std::vector<QVector3D> RenderEngine::calculateEllipsePoints(
-    const QVector3D& center, QVector3D normal, double a, double b,
-    int numPoints) const {
+std::vector<QVector3D> RenderEngine::getEllipsePolygonPoints(
+    types::Ellipse ellipse) const {
+    auto [centerPoint, normal, major, minor, cnt] = ellipse;
+
     normal.normalize();
 
     QVector3D w(0, 0, 1);
@@ -356,16 +370,39 @@ std::vector<QVector3D> RenderEngine::calculateEllipsePoints(
     QVector3D v = QVector3D::crossProduct(normal, u).normalized();
 
     std::vector<QVector3D> points;
-    points.reserve(numPoints);
+    points.reserve(cnt);
 
-    for (int i = 0; i < numPoints; ++i) {
-        double theta = 2.0 * std::acos(-1) * i / numPoints;
-        QVector3D point =
-            center + u * (a * std::cos(theta)) + v * (b * std::sin(theta));
+    for (int i = 0; i < cnt; ++i) {
+        double theta = 2.0 * std::acos(-1) * i / cnt;
+        QVector3D point = centerPoint + u * (major * std::cos(theta)) +
+                          v * (minor * std::sin(theta));
         points.push_back(point);
     }
 
     return points;
+}
+
+std::pair<HPS::Point, HPS::Point> RenderEngine::getClosestPointPair(
+    types::Ellipse ellipse1, types::Ellipse ellipse2) const {
+    auto polygon1 = getEllipsePolygonPoints(ellipse1);
+    auto polygon2 = getEllipsePolygonPoints(ellipse2);
+
+    double distance = std::numeric_limits<double>::infinity();
+    std::pair<QVector3D, QVector3D> ans;
+    for (auto point1 : polygon1) {
+        for (auto point2 : polygon2) {
+            double currentDistance = point1.distanceToPoint(point2);
+            if (currentDistance < distance) {
+                distance = currentDistance;
+                ans = {point1, point2};
+            }
+        }
+    }
+
+    return std::pair<HPS::Point, HPS::Point>{
+        HPS::Point{ ans.first.x(),  ans.first.y(),  ans.first.z()},
+        HPS::Point{ans.second.x(), ans.second.y(), ans.second.z()}
+    };
 }
 
 }  // namespace RenderEngine

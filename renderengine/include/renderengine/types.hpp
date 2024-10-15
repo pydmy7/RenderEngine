@@ -1,6 +1,6 @@
 #pragma once
 
-#include <utility>
+#include <QVector3D>
 
 namespace types {
 
@@ -20,10 +20,18 @@ struct Circle {
     T radius;
 };
 
-template <typename T>
+// template <typename T>
+// struct Ellipse {
+//     Point<T> o, v;
+//     std::pair<T, T> radii;
+// };
+
 struct Ellipse {
-    Point<T> o, v;
-    std::pair<T, T> radii;
+    QVector3D centerPoint{};
+    QVector3D normal{};
+    double major{};
+    double minor{};
+    int cnt{};
 };
 
 }  // namespace types
