@@ -54,11 +54,17 @@ private:
     void render() const;
 
     HPS::SegmentKey getLinePort(HPS::Point p1, HPS::Point p2) const;
+    HPS::SegmentKey getLinePortPreview(HPS::Point p1, HPS::Point p2) const;
     HPS::SegmentKey getQuadrilateralFacePort(HPS::Point p1, HPS::Point p2,
                                              HPS::Point o1,
                                              HPS::Point o2) const;
+    HPS::SegmentKey getQuadrilateralFacePortPreview(HPS::Point p1,
+                                                    HPS::Point p2,
+                                                    HPS::Point o1,
+                                                    HPS::Point o2) const;
     HPS::SegmentKey getHoopFacePort(types::Ellipse ellipse1,
                                     types::Ellipse ellipse2) const;
+    HPS::SegmentKey getHoopFacePortPreview(types::Ellipse ellipse1, types::Ellipse ellipse2) const;
 
     HPS::SegmentKey getLine(HPS::Point p1, HPS::Point p2) const;
     HPS::SegmentKey getCone(HPS::Point p1, HPS::Point p2) const;

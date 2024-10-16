@@ -232,11 +232,27 @@ HPS::SegmentKey RenderEngine::getLinePort(HPS::Point p1, HPS::Point p2) const {
     return root;
 }
 
+HPS::SegmentKey RenderEngine::getLinePortPreview(HPS::Point p1,
+                                                 HPS::Point p2) const {
+    auto line = getLine(p1, p2);
+    line.GetMaterialMappingControl().SetLineColor(
+        HPS::RGBColor(255 / 255.0, 128 / 255.0, 64 / 255.0));
+
+    auto cone = getCone(p1, p2);
+    cone.GetMaterialMappingControl().SetFaceColor(
+        HPS::RGBColor(167 / 255.0, 84 / 255.0, 42 / 255.0));
+
+    auto root = HPS::Database::CreateRootSegment();
+    root.IncludeSegment(line);
+    root.IncludeSegment(cone);
+
+    return root;
+}
+
 HPS::SegmentKey RenderEngine::getQuadrilateralFacePort(HPS::Point p1,
                                                        HPS::Point p2,
                                                        HPS::Point o1,
                                                        HPS::Point o2) const {
-    auto transparentFace = getTransparentFace(HPS::PointArray{p1, p2, o2, o1});
     // auto linePort = getLinePort((p1 + p2) / 2, (o1 + o2) / 2);
     // auto line = getLine((p1 + o1) / 2, (p2 + o2) / 2);
     auto linePort = getLinePort(
@@ -245,10 +261,30 @@ HPS::SegmentKey RenderEngine::getQuadrilateralFacePort(HPS::Point p1,
     auto line = getLine(
         HPS::Point{(p1.x + o1.x) / 2, (p1.y + o1.y) / 2, (p1.z + o1.z) / 2},
         HPS::Point{(p2.x + o2.x) / 2, (p2.y + o2.y) / 2, (p2.z + o2.z) / 2});
+    line.GetMaterialMappingControl().SetLineColor(HPS::RGBColor(1, 0, 0));
+
+    auto root = HPS::Database::CreateRootSegment();
+    root.IncludeSegment(linePort);
+    root.IncludeSegment(line);
+
+    return root;
+}
+
+HPS::SegmentKey RenderEngine::getQuadrilateralFacePortPreview(HPS::Point p1, HPS::Point p2, HPS::Point o1, HPS::Point o2) const {
+    auto transparentFace = getTransparentFace(HPS::PointArray{p1, p2, o2, o1});
+    // auto linePort = getLinePort((p1 + p2) / 2, (o1 + o2) / 2);
+    // auto line = getLine((p1 + o1) / 2, (p2 + o2) / 2);
+    auto linePortPreview = getLinePortPreview(
+        HPS::Point{(p1.x + p2.x) / 2, (p1.y + p2.y) / 2, (p1.z + p2.z) / 2},
+        HPS::Point{(o1.x + o2.x) / 2, (o1.y + o2.y) / 2, (o1.z + o2.z) / 2});
+    auto line = getLine(
+        HPS::Point{(p1.x + o1.x) / 2, (p1.y + o1.y) / 2, (p1.z + o1.z) / 2},
+        HPS::Point{(p2.x + o2.x) / 2, (p2.y + o2.y) / 2, (p2.z + o2.z) / 2});
+    line.GetMaterialMappingControl().SetLineColor(HPS::RGBColor(255 / 255.0, 128 / 255.0, 64 / 255.0));
 
     auto root = HPS::Database::CreateRootSegment();
     root.IncludeSegment(transparentFace);
-    root.IncludeSegment(linePort);
+    root.IncludeSegment(linePortPreview);
     root.IncludeSegment(line);
 
     return root;
@@ -256,6 +292,24 @@ HPS::SegmentKey RenderEngine::getQuadrilateralFacePort(HPS::Point p1,
 
 HPS::SegmentKey RenderEngine::getHoopFacePort(types::Ellipse ellipse1,
                                               types::Ellipse ellipse2) const {
+    // assert contains otherwise swap
+
+    auto transparentFace = getTransparentFace(ellipse1, ellipse2);
+
+    auto [point1, point2] = getClosestPointPair(ellipse1, ellipse2);
+    auto linePort = getLinePort(point1, point2);
+
+    auto lines = getAverageLines(ellipse1, ellipse2);
+
+    auto root = HPS::Database::CreateRootSegment();
+    root.IncludeSegment(transparentFace);
+    root.IncludeSegment(linePort);
+    root.IncludeSegment(lines);
+
+    return root;
+}
+
+HPS::SegmentKey RenderEngine::getHoopFacePortPreview(types::Ellipse ellipse1, types::Ellipse ellipse2) const {
     // assert contains otherwise swap
 
     auto transparentFace = getTransparentFace(ellipse1, ellipse2);
