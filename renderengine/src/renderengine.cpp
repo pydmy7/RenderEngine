@@ -190,8 +190,8 @@ void RenderEngine::init() {
 }
 
 void RenderEngine::render() const {
-    real();
-    // preview();
+    // real();
+    preview();
 }
 
 void RenderEngine::real() const {

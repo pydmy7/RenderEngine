@@ -37,6 +37,8 @@ HPS::SegmentKey getLinePortPreview(HPS::Point p1, HPS::Point p2) {
 HPS::SegmentKey getQuadrilateralFacePort(HPS::Point p1, HPS::Point p2,
                                          HPS::Point o1, HPS::Point o2) {
     auto transparentFace = getTransparentFace(HPS::PointArray{p1, p2, o2, o1});
+    transparentFace.GetMaterialMappingControl().SetFaceColor(
+        HPS::RGBAColor{117 / 255.0, 117 / 255.0, 111 / 255.0, 0.5});
 
     // auto linePort = getLinePort((p1 + p2) / 2, (o1 + o2) / 2);
     // auto line = getLine((p1 + o1) / 2, (p2 + o2) / 2);
@@ -84,6 +86,8 @@ HPS::SegmentKey getHoopFacePort(types::Ellipse ellipse1,
     // assert contains otherwise swap
 
     auto transparentFace = getTransparentFace(ellipse1, ellipse2);
+    transparentFace.GetMaterialMappingControl().SetFaceColor(
+        HPS::RGBAColor{117 / 255.0, 117 / 255.0, 111 / 255.0, 0.5});
 
     auto [point1, point2] = getClosestPointPair(ellipse1, ellipse2);
     auto linePort = getLinePort(point1, point2);
