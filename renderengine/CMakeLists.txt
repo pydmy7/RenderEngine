@@ -4,6 +4,8 @@ addExecutable(${target})
 target_link_libraries(${target} PRIVATE
     toml++
     spdlog::spdlog
+    nlohmann::json
+
     Qt5::All
     hps::hps
 )
