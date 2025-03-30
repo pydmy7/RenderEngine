@@ -1,0 +1,14 @@
+# Set the default behavior for all files
+* text=auto eol=lf
+
+# Normalize and convert to native line endings on checkout
+*.c text diff=cpp
+*.cc text diff=cpp
+*.cxx text diff=cpp
+*.cpp text diff=cpp
+*.h text diff=cpp
+*.hxx text diff=cpp
+*.hpp text diff=cpp
+
+# Optionally specify other file types (e.g., JSON files)
+*.json text eol=lf

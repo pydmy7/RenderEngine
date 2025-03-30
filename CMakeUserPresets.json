@@ -1,0 +1,55 @@
+{
+    "version": 3,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 21,
+        "patch": 3
+    },
+    "configurePresets": [
+        {
+            "name": "common",
+            "inherits": [ "base" ],
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": {
+                    "type": "PATH",
+                    "value": "D:/Library/vcpkg-export/scripts/buildsystems/vcpkg.cmake"
+                }
+            }
+        },
+        {
+            "name": "ninja-debug",
+            "inherits": [ "common", "ninja", "debug" ]
+        },
+        {
+            "name": "ninja-release",
+            "inherits": [ "common", "ninja", "release" ]
+        },
+        {
+            "name": "vs-debug",
+            "inherits": [ "common", "vs", "debug" ]
+        },
+        {
+            "name": "vs-release",
+            "inherits": [ "common", "vs", "release" ]
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "ninja-debug",
+            "configurePreset": "ninja-debug"
+        },
+        {
+            "name": "ninja-release",
+            "configurePreset": "ninja-release"
+        },
+        {
+            "name": "vs-debug",
+            "configurePreset": "vs-debug"
+        },
+        {
+            "name": "vs-release",
+            "configurePreset": "vs-release"
+        }
+    ]
+}

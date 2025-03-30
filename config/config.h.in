@@ -1,0 +1,15 @@
+#pragma once
+
+#include <filesystem>
+
+namespace config {
+
+constexpr std::string_view PROJECT_NAME {"@PROJECT_NAME@"};
+const std::filesystem::path PROJECT_SOURCE_DIR {"@PROJECT_SOURCE_DIR@"};
+const std::filesystem::path PROJECT_BINARY_DIR {"@PROJECT_BINARY_DIR@"};
+
+const std::filesystem::path CMAKE_CURRENT_SOURCE_DIR {"@CMAKE_CURRENT_SOURCE_DIR@"};
+const std::filesystem::path CMAKE_CURRENT_BINARY_DIR {"@CMAKE_CURRENT_BINARY_DIR@"};
+const std::string CMAKE_NAME = CMAKE_CURRENT_SOURCE_DIR.stem().string();
+
+}  // namespace config

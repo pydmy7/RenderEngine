@@ -1,0 +1,81 @@
+{
+    "version": 3,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 21,
+        "patch": 3
+    },
+    "configurePresets": [
+        {
+            "name": "base",
+            "hidden": true,
+            "binaryDir": "${sourceDir}/build",
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": {
+                    "type": "BOOL",
+                    "value": "ON"
+                },
+                "CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS": {
+                    "type": "BOOL",
+                    "value": "ON"
+                },
+                "CMAKE_CXX_STANDARD": {
+                    "type": "STRING",
+                    "value": "20"
+                }
+            }
+        },
+        {
+            "name": "ninja",
+            "description": "generator: ninja, compiler: llvm",
+            "hidden": true,
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": {
+                    "type": "STRING",
+                    "value": "clang"
+                },
+                "CMAKE_CXX_COMPILER": {
+                    "type": "STRING",
+                    "value": "clang++"
+                }
+            }
+        },
+        {
+            "name": "vs",
+            "description": "generator: Visual Studio 17 2022, compiler: cl",
+            "hidden": true,
+            "generator": "Visual Studio 17 2022",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": {
+                    "type": "STRING",
+                    "value": "cl"
+                },
+                "CMAKE_CXX_COMPILER": {
+                    "type": "STRING",
+                    "value": "cl"
+                }
+            }
+        },
+        {
+            "name": "debug",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": {
+                    "type": "STRING",
+                    "value": "Debug"
+                }
+            }
+        },
+        {
+            "name": "release",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": {
+                    "type": "STRING",
+                    "value": "Release"
+                }
+            }
+        }
+    ]
+}
