@@ -1,12 +1,13 @@
 param (
-    [string]$preset = "preset",
+    [string]$preset = "base",
+    [string]$config = "Debug",
     [string]$target = "yuanshen"
 )
 
 clear
 echo "clear"
 
-echo "`npreset: $preset, target: $target"
+echo "`npreset: $preset, config: $config, target: $target"
 
 # echo "`nRemove-Item -Recurse -Force -Path .cache"
 # Remove-Item -Recurse -Force -Path .cache
@@ -23,8 +24,8 @@ cmake -E capabilities | jq '.fileApi' > ./build/.cmake/api/v1/query/client-vscod
 echo "`nsource: cmake --preset $preset"
 cmake --preset $preset
 
-echo "`nbuild: cmake --build -j --preset $preset --target $target"
-cmake --build -j --preset $preset --target $target
+echo "`nbuild: cmake --build -j --preset $preset --config $config --target $target"
+cmake --build -j --preset $preset --config $config --target $target
 
 if ($target -eq "all") {
     exit
@@ -32,7 +33,7 @@ if ($target -eq "all") {
 
 if ($?) {
     echo "`nrun: cmake -E time pwsh -Command ./build/src/$target/$target.exe"
-    Invoke-Expression "cmake -E time pwsh -Command ./build/src/$target/$target.exe"
+    Invoke-Expression "cmake -E time pwsh -Command ./build/src/$target/$config/$target.exe"
 } else {
     echo "`nbuild failed!!!"
 }

@@ -26,56 +26,14 @@
             }
         },
         {
-            "name": "ninja",
-            "description": "generator: ninja, compiler: llvm",
+            "name": "Ninja-Multi-Config",
             "hidden": true,
-            "generator": "Ninja",
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": {
-                    "type": "STRING",
-                    "value": "clang"
-                },
-                "CMAKE_CXX_COMPILER": {
-                    "type": "STRING",
-                    "value": "clang++"
-                }
-            }
+            "generator": "Ninja Multi-Config"
         },
         {
-            "name": "vs",
-            "description": "generator: Visual Studio 17 2022, compiler: cl",
+            "name": "Visual-Studio-17-2022",
             "hidden": true,
-            "generator": "Visual Studio 17 2022",
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": {
-                    "type": "STRING",
-                    "value": "cl"
-                },
-                "CMAKE_CXX_COMPILER": {
-                    "type": "STRING",
-                    "value": "cl"
-                }
-            }
-        },
-        {
-            "name": "debug",
-            "hidden": true,
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": {
-                    "type": "STRING",
-                    "value": "Debug"
-                }
-            }
-        },
-        {
-            "name": "release",
-            "hidden": true,
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": {
-                    "type": "STRING",
-                    "value": "Release"
-                }
-            }
+            "generator": "Visual Studio 17 2022"
         }
     ]
 }

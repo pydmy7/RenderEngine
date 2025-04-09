@@ -18,38 +18,22 @@
             }
         },
         {
-            "name": "ninja-debug",
-            "inherits": [ "common", "ninja", "debug" ]
+            "name": "ninja",
+            "inherits": [ "common", "Ninja-Multi-Config" ]
         },
         {
-            "name": "ninja-release",
-            "inherits": [ "common", "ninja", "release" ]
-        },
-        {
-            "name": "vs-debug",
-            "inherits": [ "common", "vs", "debug" ]
-        },
-        {
-            "name": "vs-release",
-            "inherits": [ "common", "vs", "release" ]
+            "name": "vs",
+            "inherits": [ "common", "Visual-Studio-17-2022" ]
         }
     ],
     "buildPresets": [
         {
-            "name": "ninja-debug",
-            "configurePreset": "ninja-debug"
+            "name": "ninja",
+            "configurePreset": "ninja"
         },
         {
-            "name": "ninja-release",
-            "configurePreset": "ninja-release"
-        },
-        {
-            "name": "vs-debug",
-            "configurePreset": "vs-debug"
-        },
-        {
-            "name": "vs-release",
-            "configurePreset": "vs-release"
+            "name": "vs",
+            "configurePreset": "vs"
         }
     ]
 }
