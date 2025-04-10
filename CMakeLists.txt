@@ -10,9 +10,10 @@ if (CCACHE_FOUND)
     set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
 endif(CCACHE_FOUND)
 
-add_subdirectory(cmake)
+find_package(spdlog CONFIG REQUIRED)
+find_package(Vulkan REQUIRED)
+find_package(crashpad CONFIG REQUIRED)
 
-find_package(vsg CONFIG REQUIRED)
-find_package(vsgXchange CONFIG REQUIRED)
+add_subdirectory(cmake)
 
 add_subdirectory(src)

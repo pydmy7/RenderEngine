@@ -13,7 +13,7 @@
             "cacheVariables": {
                 "CMAKE_TOOLCHAIN_FILE": {
                     "type": "PATH",
-                    "value": "D:/Library/vcpkg-export/scripts/buildsystems/vcpkg.cmake"
+                    "value": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
                 }
             }
         },
