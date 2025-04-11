@@ -4,6 +4,11 @@ project(LearnSomething)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
+if (MSVC)
+    add_compile_options(/Zi)
+    add_link_options(/DEBUG)
+endif()
+
 find_program(CCACHE_FOUND ccache)
 if (CCACHE_FOUND)
     message(STATUS "[INFO] Global use of ccache to accelerate compile")

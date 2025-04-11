@@ -1,3 +1,5 @@
+#include "config/config.h"
+
 #include <client/crashpad_client.h>
 #include <client/crash_report_database.h>
 #include <client/settings.h>
@@ -6,11 +8,12 @@
 #include <base/strings/string_util.h>
 
 #include <iostream>
+#include <cassert>
 
 int main() {
-    base::FilePath handler(L"D:\\Code\\RenderEngine\\build\\vcpkg_installed\\x64-windows\\debug\\tools\\crashpad_handler.exe"); // 替换成你实际的路径
-    base::FilePath db(L"D:\\Code\\RenderEngine\\build\\dmp");
-    base::FilePath reports_dir(L"D:\\Code\\RenderEngine\\build\\dmp\\reports");
+    base::FilePath handler(config::PROJECT_BINARY_DIR / "vcpkg_installed/x64-windows/tools/crashpad/crashpad_handler.exe");
+    base::FilePath db(config::PROJECT_BINARY_DIR / "crash_database");
+    base::FilePath reports_dir(config::PROJECT_BINARY_DIR / "crash_database/none");
 
     std::map<std::string, std::string> annotations;
     std::vector<std::string> arguments;
@@ -35,9 +38,12 @@ int main() {
     std::cout << "App started, will crash in 3 seconds...\n";
     Sleep(3000);
 
+    std::cout << (config::PROJECT_BINARY_DIR / "vcpkg_installed/x64-windows/tools/crashpad/crashpad_handler.exe") << std::endl;
+
     // 模拟崩溃
-    volatile int* p = nullptr;
+    int* p = nullptr;
     *p = 42;
+    assert(false);
 
     return 0;
 }
