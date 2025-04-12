@@ -17,7 +17,7 @@ endif(CCACHE_FOUND)
 
 find_package(spdlog CONFIG REQUIRED)
 find_package(Vulkan REQUIRED)
-find_package(crashpad CONFIG REQUIRED)
+find_package(SDL3 CONFIG REQUIRED)
 
 add_subdirectory(cmake)
 

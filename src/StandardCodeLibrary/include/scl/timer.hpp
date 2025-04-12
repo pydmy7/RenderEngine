@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 
-namespace timer {
+namespace scl {
 
 class Timer final {
 public:
@@ -21,4 +21,4 @@ private:
     std::chrono::steady_clock::time_point start_time_;
 };
 
-}  // namespace timer
+}  // namespace scl
