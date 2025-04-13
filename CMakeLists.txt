@@ -11,8 +11,7 @@ if (CCACHE_FOUND)
 endif(CCACHE_FOUND)
 
 find_package(spdlog CONFIG REQUIRED)
-find_package(Vulkan REQUIRED)
-find_package(SDL2 CONFIG REQUIRED)
+find_package(EnTT CONFIG REQUIRED)
 
 add_subdirectory(cmake)
 
