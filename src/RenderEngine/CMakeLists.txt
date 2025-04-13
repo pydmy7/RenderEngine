@@ -5,5 +5,8 @@ deploy(${target})
 target_link_libraries(${target} PRIVATE
     StandardCodeLibrary
     spdlog::spdlog Vulkan::Vulkan
-    SDL3::SDL3
+)
+target_link_libraries(${target} PRIVATE
+    $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
+    $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
 )

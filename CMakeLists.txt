@@ -1,13 +1,8 @@
 cmake_minimum_required(VERSION 3.21)
 
-project(LearnSomething)
+project(RenderEngine)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-
-if (MSVC)
-    add_compile_options(/Zi)
-    add_link_options(/DEBUG)
-endif()
 
 find_program(CCACHE_FOUND ccache)
 if (CCACHE_FOUND)
@@ -17,7 +12,7 @@ endif(CCACHE_FOUND)
 
 find_package(spdlog CONFIG REQUIRED)
 find_package(Vulkan REQUIRED)
-find_package(SDL3 CONFIG REQUIRED)
+find_package(SDL2 CONFIG REQUIRED)
 
 add_subdirectory(cmake)
 
