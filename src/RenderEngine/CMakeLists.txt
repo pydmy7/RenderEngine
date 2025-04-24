@@ -3,5 +3,7 @@ add_executable(${target})
 deploy(${target})
 
 target_link_libraries(${target} PRIVATE
-    spdlog::spdlog EnTT::EnTT
+    spdlog::spdlog
+    glad::glad
+    glfw
 )
