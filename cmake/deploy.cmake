@@ -47,7 +47,6 @@ function(deploy target)
         $<$<CXX_COMPILER_ID:MSVC>:/permissive;/Zc:preprocessor;/utf-8;/W4;>
         $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall;-Wextra;-Wpedantic;-Wshadow;>
     )
-    target_compile_definitions(${target} PUBLIC $<IF:$<CONFIG:Debug>,CONFIG_DEBUG,CONFIG_RELEASE>)
 
     if (type STREQUAL "EXECUTABLE")
         set_target_properties(${target} PROPERTIES FOLDER "Executables")
