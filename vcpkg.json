@@ -1,7 +1,10 @@
 {
     "dependencies": [
-        "spdlog",
-        "eigen3", "intel-mkl",
-        "glfw3", "glad"
+        "spdlog", "entt", "eigen3", "intel-mkl",
+        "opengl", "glfw3", "glad",
+        {
+            "name": "imgui",
+            "features": [ "glfw-binding", "opengl3-binding" ]
+        }
     ]
 }

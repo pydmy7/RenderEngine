@@ -3,7 +3,7 @@ add_executable(${target})
 deploy(${target})
 
 target_link_libraries(${target} PRIVATE
-    spdlog::spdlog
-    glad::glad
-    glfw
+    StandardCodeLibrary
+    spdlog::spdlog EnTT::EnTT
+    OpenGL::GL glad::glad glfw imgui::imgui
 )
