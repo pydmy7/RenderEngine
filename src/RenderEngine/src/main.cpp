@@ -9,6 +9,60 @@
 #include <format>
 #include <thread>
 
+namespace glfw {
+
+GLFWwindow* init() {
+    glfwSetErrorCallback([](int error, const char* description) {
+        std::cerr << std::format("GLFW Error {}: {}", error, description) << std::endl;
+    });
+
+    if (!glfwInit()) {
+        std::exit(-1);
+    }
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+
+    GLFWwindow* window = glfwCreateWindow(1280, 720, "RenderEngine", nullptr, nullptr);
+    if (window == nullptr) {
+        std::exit(-1);
+    }
+    glfwMakeContextCurrent(window);
+    glfwSetFramebufferSizeCallback(window, []([[maybe_unused]] GLFWwindow* window, int width, int height) {
+        glViewport(0, 0, width, height);
+    });
+    glfwSwapInterval(1);
+
+    return window;
+}
+
+}  // namespace glfw
+
+namespace opengl {
+
+void init() {
+    if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
+        std::cerr << "Failed to initialize GLAD" << std::endl;
+        std::exit(-1);
+    }
+
+    glEnable(GL_DEBUG_OUTPUT);
+    glDebugMessageCallback([](
+        [[maybe_unused]] GLenum source,
+        [[maybe_unused]] GLenum type,
+        [[maybe_unused]] GLuint id,
+        [[maybe_unused]] GLenum severity,
+        [[maybe_unused]] GLsizei length,
+        const GLchar* message,
+        [[maybe_unused]] const void* userParam
+    ) {
+        std::cerr << "OpenGL Debug: " << message << std::endl;
+    }, nullptr);
+}
+
+}  // namespace opengl
+
 namespace imgui {
 
 void init(GLFWwindow* window) {
@@ -55,53 +109,15 @@ void destroy() {
 
 }  // namespace imgui
 
-void processInput(GLFWwindow *window) {
-    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+void processInput(GLFWwindow* window) {
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
     }
 }
 
 int main() {
-    glfwSetErrorCallback([](int error, const char* description) {
-        std::cerr << std::format("GLFW Error {}: {}", error, description) << std::endl;
-    });
-
-    if (!glfwInit()) {
-        return -1;
-    }
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "Dear ImGui GLFW+OpenGL3 example", nullptr, nullptr);
-    if (window == nullptr) {
-        return -1;
-    }
-    glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, []([[maybe_unused]] GLFWwindow* window, int width, int height) {
-        glViewport(0, 0, width, height);
-    });
-    glfwSwapInterval(1);
-
-    if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
-        std::cerr << "Failed to initialize GLAD" << std::endl;
-        return -1;
-    }
-
-    glEnable(GL_DEBUG_OUTPUT);
-    glDebugMessageCallback([](
-        [[maybe_unused]] GLenum source,
-        [[maybe_unused]] GLenum type,
-        [[maybe_unused]] GLuint id,
-        [[maybe_unused]] GLenum severity,
-        [[maybe_unused]] GLsizei length,
-        const GLchar* message,
-        [[maybe_unused]] const void* userParam
-    ) {
-        std::cerr << "OpenGL Debug: " << message << std::endl;
-    }, nullptr);
-
+    auto window = glfw::init();
+    opengl::init();
     imgui::init(window);
 
     while (!glfwWindowShouldClose(window)) {
