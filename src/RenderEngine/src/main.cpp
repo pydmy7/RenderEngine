@@ -86,11 +86,6 @@ void renderLoopBegin() {
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    static bool show_demo = true;
-    if (show_demo) {
-        ImGui::ShowDemoWindow(&show_demo);
-    }
-
     ImGui::Begin("Performance");
     ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
     ImGui::End();

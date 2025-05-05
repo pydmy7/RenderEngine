@@ -1,5 +1,2 @@
-include(clangformat.cmake)
-include(clangtidy.cmake)
-include(copyfile.cmake)
-# include(windeployqt.cmake)
+include(copydll.cmake)
 include(deploy.cmake)
