@@ -12,10 +12,14 @@ function(deploy target)
 
     # Qt
     if (ARGV1 STREQUAL "Qt")
-        file(GLOB_RECURSE ui "${CMAKE_CURRENT_SOURCE_DIR}/ui/*.ui")
+        file(GLOB_RECURSE ui
+            CONFIGURE_DEPENDS
+            "${CMAKE_CURRENT_SOURCE_DIR}/ui/*.ui")
         set_target_properties(${target} PROPERTIES AUTOUIC_SEARCH_PATHS "${CMAKE_CURRENT_SOURCE_DIR}/ui")
 
-        file(GLOB_RECURSE qrc "${CMAKE_CURRENT_SOURCE_DIR}/qrc/*.qrc")
+        file(GLOB_RECURSE qrc
+            CONFIGURE_DEPENDS
+            "${CMAKE_CURRENT_SOURCE_DIR}/qrc/*.qrc")
 
         set_target_properties(${target} PROPERTIES AUTOMOC ON AUTOUIC ON AUTORCC ON)
 
@@ -27,6 +31,7 @@ function(deploy target)
 
     # Headers
     file(GLOB_RECURSE headers
+        CONFIGURE_DEPENDS
         "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hxx")
