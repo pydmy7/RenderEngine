@@ -18,22 +18,22 @@
             }
         },
         {
-            "name": "ninja",
+            "name": "windows-ninja",
             "inherits": [ "common", "Ninja-Multi-Config" ]
         },
         {
-            "name": "vs",
+            "name": "windows-vs",
             "inherits": [ "common", "Visual-Studio-17-2022" ]
         }
     ],
     "buildPresets": [
         {
-            "name": "ninja",
-            "configurePreset": "ninja"
+            "name": "windows-ninja",
+            "configurePreset": "windows-ninja"
         },
         {
-            "name": "vs",
-            "configurePreset": "vs"
+            "name": "windows-vs",
+            "configurePreset": "windows-vs"
         }
     ]
 }
