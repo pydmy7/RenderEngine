@@ -5,6 +5,9 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
+#include <implot.h>
+#include <implot_internal.h>
+
 #include <iostream>
 #include <format>
 #include <thread>
@@ -68,6 +71,7 @@ namespace imgui {
 void init(GLFWwindow* window) {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+    ImPlot::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
@@ -85,10 +89,6 @@ void renderLoopBegin() {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-
-    ImGui::Begin("Performance");
-    ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
-    ImGui::End();
 }
 
 void renderLoopEnd() {
@@ -99,7 +99,22 @@ void renderLoopEnd() {
 void destroy() {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
+    ImPlot::DestroyContext();
     ImGui::DestroyContext();
+}
+
+void fps() {
+    ImGui::Begin("Performance");
+    ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
+    ImGui::End();
+}
+
+void colorBar() {
+    ImGui::Begin("Color Bar");
+    ImPlot::PushColormap(ImPlotColormap_Jet);
+    ImPlot::ColormapScale("Color Scale", 0.0f, 1.0f, ImVec2(100, 200));
+    ImPlot::PopColormap();
+    ImGui::End();
 }
 
 }  // namespace imgui
@@ -131,6 +146,10 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT);
 
         imgui::renderLoopBegin();
+
+        imgui::fps();
+        imgui::colorBar();
+
         imgui::renderLoopEnd();
 
         glfwSwapBuffers(window);
