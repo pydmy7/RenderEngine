@@ -9,7 +9,7 @@ function(winDeployQt target)
 
     get_target_property(type ${target} TYPE)
     if (NOT ${type} STREQUAL "EXECUTABLE")
-        message(FATAL_ERROR "winDeployQt() was called on a non-executable target: ${target}")
+        return()
     endif()
 
     if (NOT DEFINED Qt5_DIR)
