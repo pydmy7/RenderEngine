@@ -1,4 +1,8 @@
 function(deploy target)
+    if (NOT TARGET ${target})
+        message(FATAL_ERROR "deploy() was called with a non-target: ${target}")
+    endif()
+
     # target type
     get_target_property(type ${target} TYPE)
     if (NOT (type STREQUAL "EXECUTABLE"
