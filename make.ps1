@@ -4,6 +4,8 @@ param (
     [string]$target = "yuanshen"
 )
 
+$ErrorActionPreference = "Stop"
+
 clear
 echo "clear"
 
@@ -36,4 +38,5 @@ if ($?) {
     Invoke-Expression "cmake -E time pwsh -Command ./build/src/$target/$config/$target.exe"
 } else {
     echo "`nbuild failed!!!"
+    exit 1
 }
