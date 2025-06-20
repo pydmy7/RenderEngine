@@ -8,5 +8,3 @@ target_link_libraries(${target} PRIVATE
     OpenGL::GL glad::glad glfw
     imgui::imgui implot::implot
 )
-
-generatePath(${target} "${PROJECT_SOURCE_DIR}/ExePath.toml")
