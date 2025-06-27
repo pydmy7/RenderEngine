@@ -18,22 +18,48 @@
             }
         },
         {
-            "name": "windows-ninja",
-            "inherits": [ "common", "Ninja-Multi-Config" ]
+            "name": "ninja-clang",
+            "inherits": [ "common" ],
+            "generator": "Ninja Multi-Config",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++"
+            }
         },
         {
-            "name": "windows-vs",
-            "inherits": [ "common", "Visual-Studio-17-2022" ]
+            "name": "ninja-cl",
+            "inherits": [ "common" ],
+            "generator": "Ninja Multi-Config",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "cl.exe",
+                "CMAKE_CXX_COMPILER": "cl.exe"
+            }
+        },
+        {
+            "name": "vs-cl",
+            "inherits": [ "common" ],
+            "generator": "Visual Studio 17 2022",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "cl.exe",
+                "CMAKE_CXX_COMPILER": "cl.exe"
+            }
         }
     ],
     "buildPresets": [
         {
-            "name": "windows-ninja",
-            "configurePreset": "windows-ninja"
+            "name": "ninja-clang",
+            "configurePreset": "ninja-clang",
+            "configuration": "Debug"
         },
         {
-            "name": "windows-vs",
-            "configurePreset": "windows-vs"
+            "name": "ninja-cl",
+            "configurePreset": "ninja-cl",
+            "configuration": "Debug"
+        },
+        {
+            "name": "vs-cl",
+            "configurePreset": "vs-cl",
+            "configuration": "Debug"
         }
     ]
 }

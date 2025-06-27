@@ -24,16 +24,6 @@
                     "value": "20"
                 }
             }
-        },
-        {
-            "name": "Ninja-Multi-Config",
-            "hidden": true,
-            "generator": "Ninja Multi-Config"
-        },
-        {
-            "name": "Visual-Studio-17-2022",
-            "hidden": true,
-            "generator": "Visual Studio 17 2022"
         }
     ]
 }

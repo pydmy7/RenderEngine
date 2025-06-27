@@ -12,4 +12,4 @@ Timer::~Timer() {
     std::cout << title_ << " => " << "timer: " << duration << " ms." << std::endl;
 }
 
-}// namespace scl
+}  // namespace scl

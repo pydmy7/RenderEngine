@@ -1,5 +1,5 @@
 param (
-    [string]$preset = "base",
+    [string]$preset = "ninja-clang",
     [string]$config = "Debug",
     [string]$target = "yuanshen"
 )
