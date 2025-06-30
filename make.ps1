@@ -34,7 +34,7 @@ if ($target -eq "all") {
 }
 
 if ($?) {
-    echo "`nrun: cmake -E time pwsh -Command ./build/src/$target/$target.exe"
+    echo "`nrun: cmake -E time pwsh -Command ./build/src/$target/$config/$target.exe"
     Invoke-Expression "cmake -E time pwsh -Command ./build/src/$target/$config/$target.exe"
 } else {
     echo "`nbuild failed!!!"
