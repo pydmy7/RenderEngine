@@ -49,17 +49,20 @@
         {
             "name": "ninja-clang",
             "configurePreset": "ninja-clang",
-            "configuration": "Debug"
+            "configuration": "Debug",
+            "jobs": 18
         },
         {
             "name": "ninja-cl",
             "configurePreset": "ninja-cl",
-            "configuration": "Debug"
+            "configuration": "Debug",
+            "jobs": 18
         },
         {
             "name": "vs-cl",
             "configurePreset": "vs-cl",
-            "configuration": "Debug"
+            "configuration": "Debug",
+            "jobs": 18
         }
     ]
 }

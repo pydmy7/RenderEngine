@@ -26,8 +26,8 @@ cmake -E capabilities | jq '.fileApi' > ./build/.cmake/api/v1/query/client-vscod
 echo "`nsource: cmake --preset $preset || exit 1"
 cmake --preset $preset || exit 1
 
-echo "`nbuild: cmake --build -j --preset $preset --config $config --target $target || exit 1"
-cmake --build -j --preset $preset --config $config --target $target || exit 1
+echo "`nbuild: cmake --build --parallel --preset $preset --config $config --target $target || exit 1"
+cmake --build --parallel --preset $preset --config $config --target $target || exit 1
 
 if ($target -eq "all") {
     exit
