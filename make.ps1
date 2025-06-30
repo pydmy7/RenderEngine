@@ -23,11 +23,11 @@ cmake -E make_directory ./build/.cmake/api/v1/query/client-vscode
 echo "`ncmake -E capabilities | jq '.fileApi' > ./build/.cmake/api/v1/query/client-vscode/query.json"
 cmake -E capabilities | jq '.fileApi' > ./build/.cmake/api/v1/query/client-vscode/query.json
 
-echo "`nsource: cmake --preset $preset"
-cmake --preset $preset
+echo "`nsource: cmake --preset $preset || exit 1"
+cmake --preset $preset || exit 1
 
-echo "`nbuild: cmake --build -j --preset $preset --config $config --target $target"
-cmake --build -j --preset $preset --config $config --target $target
+echo "`nbuild: cmake --build -j --preset $preset --config $config --target $target || exit 1"
+cmake --build -j --preset $preset --config $config --target $target || exit 1
 
 if ($target -eq "all") {
     exit
