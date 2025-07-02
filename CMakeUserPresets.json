@@ -18,7 +18,7 @@
             }
         },
         {
-            "name": "ninja-clang",
+            "name": "ninja-multi-config-clang",
             "inherits": [ "common" ],
             "generator": "Ninja Multi-Config",
             "cacheVariables": {
@@ -27,7 +27,7 @@
             }
         },
         {
-            "name": "ninja-cl",
+            "name": "ninja-multi-config-cl",
             "inherits": [ "common" ],
             "generator": "Ninja Multi-Config",
             "cacheVariables": {
@@ -47,22 +47,54 @@
     ],
     "buildPresets": [
         {
-            "name": "ninja-clang",
-            "configurePreset": "ninja-clang",
+            "name": "ninja-multi-config-clang",
+            "configurePreset": "ninja-multi-config-clang",
             "configuration": "Debug",
             "jobs": 18
         },
         {
-            "name": "ninja-cl",
-            "configurePreset": "ninja-cl",
+            "name": "ninja-multi-config-clang-debug",
+            "inherits": [ "ninja-multi-config-clang" ],
+            "configuration": "Debug"
+        },
+        {
+            "name": "ninja-multi-config-clang-release",
+            "inherits": [ "ninja-multi-config-clang" ],
+            "configuration": "Release"
+        },
+
+        {
+            "name": "ninja-multi-config-cl",
+            "configurePreset": "ninja-multi-config-cl",
             "configuration": "Debug",
             "jobs": 18
         },
+        {
+            "name": "ninja-multi-config-cl-debug",
+            "inherits": [ "ninja-multi-config-cl" ],
+            "configuration": "Debug"
+        },
+        {
+            "name": "ninja-multi-config-cl-release",
+            "inherits": [ "ninja-multi-config-cl" ],
+            "configuration": "Release"
+        },
+
         {
             "name": "vs-cl",
             "configurePreset": "vs-cl",
             "configuration": "Debug",
             "jobs": 18
+        },
+        {
+            "name": "vs-cl-debug",
+            "inherits": [ "vs-cl" ],
+            "configuration": "Debug"
+        },
+        {
+            "name": "vs-cl-release",
+            "inherits": [ "vs-cl" ],
+            "configuration": "Release"
         }
     ]
 }

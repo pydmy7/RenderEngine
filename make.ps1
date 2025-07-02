@@ -1,7 +1,7 @@
 param (
-    [string]$preset = "ninja-clang",
+    [string]$preset = "ninja-multi-config-clang",
     [string]$config = "Debug",
-    [string]$target = "yuanshen"
+    [string]$target = "RenderEngine"
 )
 
 $ErrorActionPreference = "Stop"
@@ -34,8 +34,11 @@ if ($target -eq "all") {
 }
 
 if ($?) {
-    echo "`nrun: cmake -E time pwsh -Command ./build/src/$target/$config/$target.exe"
-    Invoke-Expression "cmake -E time pwsh -Command ./build/src/$target/$config/$target.exe"
+    . ./scripts/path-info.ps1
+    $path = getTargetPath "target_path.toml" $config $target
+
+    echo "`nrun: cmake -E time pwsh -Command $path"
+    Invoke-Expression "cmake -E time pwsh -Command $path"
 } else {
     echo "`nbuild failed!!!"
     exit 1

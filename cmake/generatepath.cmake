@@ -9,8 +9,8 @@ function(generatePath target_name file_path)
     endif()
 
     file(GENERATE
-        OUTPUT "${CMAKE_BINARY_DIR}/PathInfo/$<CONFIG>Path.toml"
-        CONTENT "$<CONFIG>Path = \"$<TARGET_FILE:${target_name}>\"\n"
+        OUTPUT "${CMAKE_BINARY_DIR}/PathInfo/$<CONFIG>-${target_name}.toml"
+        CONTENT "$<CONFIG>-${target_name}-Path = \"$<TARGET_FILE:${target_name}>\"\n"
         TARGET ${target_name}
     )
 
