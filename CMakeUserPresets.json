@@ -43,6 +43,46 @@
                 "CMAKE_C_COMPILER": "cl.exe",
                 "CMAKE_CXX_COMPILER": "cl.exe"
             }
+        },
+        {
+            "name": "ninja-clang-debug",
+            "inherits": [ "common" ],
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++",
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "ninja-clang-release",
+            "inherits": [ "common" ],
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++",
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "ninja-cl-debug",
+            "inherits": [ "common" ],
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "cl.exe",
+                "CMAKE_CXX_COMPILER": "cl.exe",
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "ninja-cl-release",
+            "inherits": [ "common" ],
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "cl.exe",
+                "CMAKE_CXX_COMPILER": "cl.exe",
+                "CMAKE_BUILD_TYPE": "Release"
+            }
         }
     ],
     "buildPresets": [
@@ -95,6 +135,28 @@
             "name": "vs-cl-release",
             "inherits": [ "vs-cl" ],
             "configuration": "Release"
+        },
+
+        {
+            "name": "ninja-clang-debug",
+            "configurePreset": "ninja-clang-debug",
+            "jobs": 18
+        },
+        {
+            "name": "ninja-clang-release",
+            "configurePreset": "ninja-clang-release",
+            "jobs": 18
+        },
+
+        {
+            "name": "ninja-cl-debug",
+            "configurePreset": "ninja-cl-debug",
+            "jobs": 18
+        },
+        {
+            "name": "ninja-cl-release",
+            "configurePreset": "ninja-cl-release",
+            "jobs": 18
         }
     ]
 }

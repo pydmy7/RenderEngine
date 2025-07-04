@@ -65,6 +65,16 @@ function(deploy target)
     else()
         set_target_properties(${target} PROPERTIES FOLDER "Libraries")
         target_include_directories(${target} PUBLIC include)
+
+        if (type STREQUAL "SHARED_LIBRARY")
+            set_target_properties(${target} PROPERTIES
+                OUTPUT_NAME_DEBUG "${target}d"
+            )
+        elseif (type STREQUAL "STATIC_LIBRARY")
+            set_target_properties(${target} PROPERTIES
+                OUTPUT_NAME "${target}-static"
+            )
+        endif()
     endif()
 
     # useClangFormat(${target} ${CMAKE_CURRENT_SOURCE_DIR})
